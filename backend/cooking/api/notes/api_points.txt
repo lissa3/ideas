@@ -1,0 +1,31 @@
+A. Auth (djoser)
+
+1.sign-up:
+POST localhost:8000/auth/users/ (username,email,password,re_password)
+
+2.activate account
+POST localhost:8000/auth/users/activattion/ (uid,token)
+
+3.login
+POST localhost:8000/auth/jwt/create/ (email,password)
+
+4.Get info about user
+GET localhost:8000/auth/users/me/ (in headers: 'JWT ey...gghghgh')
+
+B Categories
+GET localhost:8000/api/v1/categories/              (with tree structure: for left-side menu) 
+GET localhost:8000/api/v1/categories-create-idea/  (without tree structure: for dropdown idea create form)
+GET localhost:8000/api/v1/cats/slug/                (ideas for a given category)
+
+C Ideas (via drf router) ipv id ||=> slug
+GET localhost:8000/api/v1/idea-collection/ideas/(slug)
+
+D Profile
+GET  localhost:8000/api/v1/profile-info/            headers: Authorization: JWT token
+PATCH localhost:8000/api/v1/profile-change/unid/
+
+E Tags
+GET localhost:8000/api/v1/tags/'
+GET localhost:8000/api/v1/tags/slug/                (ideas for a given tag)
+
+///GET localhost:8000/api/v1/tags/name/????

@@ -1,6 +1,6 @@
 <template>
     <section >
-        <div v-if="isLoading">Loading</div>
+        <div v-if="isLoading"><app-loader></app-loader></div>        
         <div v-if="tags" class="tag-list">
             <router-link v-for="tag in tags" :key="tag.id" :to="{name:'tag',params:{slug:tag.slug}}" class="tag">
                 <b-badge variant="secondary" class="tag px-2 mx-1">{{tag.name}}</b-badge>          
@@ -15,10 +15,13 @@
 <script>
 import {actionTypes} from '@/store/modules/tags'
 import {mapState} from 'vuex'
+import AppLoader from '@/components/Loader'
 export default {
     name:'AppTags',
+    components:{
+        AppLoader
+    },
     mounted(){
-        // console.log("I am a tag component")
         this.$store.dispatch(actionTypes.getTags)
         
     },
@@ -41,7 +44,7 @@ export default {
     
 }
 .tag{
-    color:rgb(56, 43, 10)
+    color:rgb(238, 236, 232)
 
 }
 .tag:hover{

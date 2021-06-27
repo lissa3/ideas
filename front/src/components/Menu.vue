@@ -25,8 +25,6 @@
               >Login via Google</router-link>
         </b-nav-item>
       </template>
-
-
        
 
         <b-nav-item href="#"><router-link :to="{ name: 'ideaGeneral' }" class="link-decor" active-class="active"
@@ -115,6 +113,10 @@ export default {
   color:black;
 }
 .active{
-  background-color: rgb(214, 193, 193);
+  background-color: rgb(245, 239, 239);
+  color:black;
+  padding:5px 10px;
+  border: 1px solid white;
+  border-radius: 3px;
 }
 </style>

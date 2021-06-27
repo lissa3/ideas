@@ -1,15 +1,18 @@
 <template>
   <div class="home">
-    <h1>This is a home page</h1>
+    <app-banner></app-banner>  
   </div>
 </template>
 
 <script>
 
-
+import AppBanner from '@/components/Banner'
 
 export default {
   name: 'AppHome',
+  components:{
+    AppBanner
+  }
   
 }
 </script>

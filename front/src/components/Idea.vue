@@ -1,9 +1,7 @@
 <template>
-    <div class="container">
-        
-        <div v-if="isLoading"><b-spinner variant="success" type="grow" label="Spinning"></b-spinner></div>
-        <div  v-if="ideas" class="wrapper">
-            
+    <div class="container">        
+        <div v-if="isLoading"><app-loader></app-loader></div>
+        <div  v-if="ideas" class="wrapper">            
             <div class="row main-row" v-for="idea in ideas" :key="idea.id">
                 <div   class="col-lg-4 col-md-12 col-sm-12">
                     <div class="idea-img mb-2">
@@ -88,10 +86,12 @@ import {actionTypes} from '@/store/modules/ideas'
 import {limit} from '@/helpers/vars'
 import {mapState} from 'vuex'
 import  AppPagination from '@/components/Pagination'
+import AppLoader from '@/components/Loader'
 export default {
     name:'AppIdea',
     components:{
-         AppPagination
+         AppPagination,
+         AppLoader
     },
     props:{
         apiUrl:{
@@ -99,14 +99,9 @@ export default {
             required:true
         }
     },
-    data(){
-        return {
-            
-        }
-    },
     computed:{            
         ...mapState({
-            ideas:state=>state.ideas.ideas,
+            ideas:state=>state.ideas.data,
             total:state=>state.ideas.count,
             isLoading:state=>state.ideas.isLoading,
             error:state=>state.ideas.error,

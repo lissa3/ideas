@@ -10,7 +10,7 @@ export const mutationTypes = {
     GET_TAGS_FAILURE:'[tags] Fail list tags',
 }
 const state ={
-    isLoading:null,
+    isLoading:false,
     data:null,
     error:null
 }

@@ -1,13 +1,11 @@
 <template>
   <div class="container-fluid">
+    
         <div class="row">
           <h3>I am a tag idea component</h3>
           <div class="col col-md-2">
             <section class="categs-space">
-              <app-categs>  
-                
-              </app-categs>
-            
+              <app-categs></app-categs>            
             </section> </div>
           <div class="col col-md-8">
             <app-idea :api-url="apiUrl"></app-idea>
@@ -29,7 +27,8 @@ export default {
   components:{
       AppIdea,
       AppTags,
-      AppCategs
+      AppCategs,
+      
   },
   computed: {
     tagName() {

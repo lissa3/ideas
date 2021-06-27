@@ -5,12 +5,12 @@ export const actionTypes = {
 }
 
 export const mutationTypes = {
-    LOADING_CATEGS:'[cats] Load tags',
-    GET_CATEGS_SUCCESS:'[cats] Set list tags',
-    GET_CATEGS_FAILURE:'[cats] Fail list tags',
+    LOADING_CATEGS:'[cats] Load categories',
+    GET_CATEGS_SUCCESS:'[cats] Set list categs',
+    GET_CATEGS_FAILURE:'[cats] Fail get categs',
 }
 const state ={
-    isLoading:null,
+    isLoading:false,
     data:null,
     error:null
 }

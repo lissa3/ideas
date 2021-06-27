@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid">     
         <div class="row">
           <h3>I am a categ idea component</h3>
           <div class="col col-md-2">
@@ -12,7 +12,6 @@
           </div>
           <div class="col col-md-2">
             <section class="tags-space">
-                <p>hfhhf</p>
               <app-tags></app-tags>
             </section>
           </div>
@@ -24,12 +23,14 @@ import AppIdea from '@/components/Idea'
 import AppTags from '@/components/Tags'
 import AppCategs from '@/components/categs/Categs'
 
+
 export default {
   name:'AppCategIdeas',
   components:{
       AppIdea,
       AppTags,
-      AppCategs
+      AppCategs,
+      
   },
   computed: {
     categSlug() {

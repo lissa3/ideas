@@ -60,19 +60,6 @@ class IdeaTestCase(APITestCase):
             rating=5
 
         )
-        # self.comment = Comment.objects.create(
-        #     user=self.user2,
-        #     idea=self.idea1,
-        #     parent=None,
-        #     body="great",
-        #)
-        # if comments > 1|=> *2 likes
-        # self.comment2 = Comment.objects.create(
-        #     user=self.user3,
-        #     idea=self.idea1,
-        #     parent=None,
-        #     body="Yes! great",
-        # )
         self.ideas = Idea.objects.annotate(an_likes=Count(
             Case(When(useridearelation__like=True, then=1))), avg_rate=Avg('useridearelation__rating'),
             )
@@ -286,15 +273,14 @@ class IdeaTestCase(APITestCase):
 class IdeaApiSearchOrderingTestCase(APITestCase):
     def setUp(self) -> None:
         self.category = Category.objects.create(name="chat")
-        self.user1 = User.objects.create(username="jack", email="zoo@mail.com")
+        self.user1 = User.objects.create(username="rio", email="zoo@mail.com")
         self.idea1 = Idea.objects.create(
-            title="first idea",
+            title="first idea rio",
             author=self.user1,
             categ=self.category,
             lead_text="Greet 1",
             main_text="Main text one",
             status=1
-
         )
         self.idea2 = Idea.objects.create(
             title="second idea",
@@ -303,7 +289,6 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
             lead_text="Greet 2 rio",
             main_text="Main text two",
             status=1
-
         )
         self.idea3 = Idea.objects.create(
             title="third idea",
@@ -312,7 +297,6 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
             lead_text="Greet 3 ",
             main_text="Main text three rio",
             status=2
-
         )
 
     def test_get_search(self):
@@ -321,15 +305,17 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
         ideas = Idea.objects.annotate(an_likes=Count(Case(When(useridearelation__like=True, then=1))),
                                       avg_rate=Avg('useridearelation__rating'),
                                       ).filter(
-            id__in=(self.idea2.id, self.idea3.id))
+            id__in=(self.idea1.id,self.idea2.id, self.idea3.id))
         url = reverse('idea-list')
         serializer_data = IdeaSerializer(ideas, many=True).data
         resp = self.client.get(url, data={"search": "rio"})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(serializer_data, resp.data)
+        self.assertEqual(len(serializer_data),3)
 
     def test_get_filter(self):
         """search: test to get filter for status;
+        custom filter:'title','categ','featured','status','author;
         """
         ideas = Idea.objects.annotate(an_likes=Count(Case(When(useridearelation__like=True, then=1))),
                                       avg_rate=Avg('useridearelation__rating'), ).filter(
@@ -339,9 +325,9 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
         resp = self.client.get(url, data={"status": "1"})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(serializer_data, resp.data)
-        self.assertEqual(len(serializer_data), len(resp.data))
+        self.assertEqual(2, len(resp.data))
 
-    def test_get_order(self):
+    def test_get_order_oldest_on_top(self):
         """search: test to get filter for status;
         """
         ideas = Idea.objects.annotate(an_likes=Count(Case(When(useridearelation__like=True, then=1))),
@@ -350,5 +336,8 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
         url = reverse('idea-list')
         serializer_data = IdeaSerializer(ideas, many=True).data
         resp = self.client.get(url, data={"ordering": "-created_at"})
+        first_the_oldest = resp.data[0]['title']
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(serializer_data, resp.data)
+        self.assertEqual(first_the_oldest,self.idea3.title)
+        

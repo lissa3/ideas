@@ -48,14 +48,21 @@ class CategoryList(generics.ListAPIView):
 #       # return queryset.get_cached_trees()
 
 class IdeasPerCategListView(generics.ListAPIView):
-    """ retrieve all ideas linked to the category"""
+    """ retrieve all ideas linked to the category;
+    for tests pagination_class = None
+    """
     serializer_class = IdeaSerializer
-    # pagination_class = CustomPaginationIdeas
-
+    pagination_class = None
+    
     def get_queryset(self):
         slug = self.kwargs.get('slug')
-        obj = get_object_or_404(Category, slug=slug)
-        return Idea.objects.filter(categ=obj)    
+        categ = get_object_or_404(Category, slug=slug)
+        if categ.children:
+            categ_descend = categ.get_descendants(include_self=True)
+            qs = Idea.objects.filter(categ__in =categ_descend)
+        else:
+            qs = Idea.objects.filter(categ=categ)    
+        return qs    
 
 # Tags (thir party taggit)
 

@@ -8,23 +8,21 @@ from django.db.models import When, Case, Count, Avg
 from rest_framework import viewsets  # , permissions
 
 from rest_framework import status
-from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.filters import SearchFilter, OrderingFilter # built-in filters
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend # third party
+from api.filters import IdeaFilter
 
 from ideas.models import Idea, UserIdeaRelation
 
 from api.serializers.ideas.idea_ser import IdeaSerializer
 from api.serializers.user_idea_rel.user_idea_relation_ser import UserIdeaRelSerializer
-
-# from .filters import IdeaFilter
 from timestamp.broadcast_utils.idea_utils import get_json_tags, checkTagStringLength
-# from .pagination import CustomPaginationIdeas
 from .permissions import IsAuthorOrIsStaffOrReadOnly
 
 User = get_user_model()
@@ -35,7 +33,9 @@ User = get_user_model()
 # premission_class = ['AllowAny']; now simpleAPI vs getAPI
 
 
+
 class IdeaRelations(UpdateModelMixin, viewsets.GenericViewSet):
+    """"""
     queryset = UserIdeaRelation.objects.all()
     serializer_class = UserIdeaRelSerializer
     lookup_field = 'idea'
@@ -50,22 +50,25 @@ class IdeaRelations(UpdateModelMixin, viewsets.GenericViewSet):
         print("object created or updated", obj)
         return obj
 
-
 class IdeaViewSet(viewsets.ModelViewSet):
+    """ custom filter:'title','categ','featured','status','author;
+    pagination for tests should be None
+    """
     serializer_class = IdeaSerializer
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    # filter by categ_id,author_id
-    filter_fields = ['categ', 'author', 'status']  # ['categ__name']
-    # search_fields = ['author__profile_display_name']
-    search_fields = ['title', 'lead_text', 'main_text']
-    # ordering_fields = ['created_at'] see model -created_at
-    # pagination_class = CustomPaginationIdeas
     permission_classes = (IsAuthorOrIsStaffOrReadOnly,)
     lookup_field = 'slug'
     parser_classes = (FormParser, MultiPartParser)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = IdeaFilter 
+    search_fields = ['title', 'lead_text', 'main_text']
+    
+    ordering = ('title','created_at')
+    # for testing
+    pagination_class=None
+    
 
     def get_queryset(self):
-        # let op: why 2 times qs?
+        # let op: 2 times qs:? |=> distinct() in postgres
         queryset = Idea.objects.annotate(
             an_likes=Count(Case(When(useridearelation__like=True, then=1))),
             avg_rate=Avg('useridearelation__rating'),

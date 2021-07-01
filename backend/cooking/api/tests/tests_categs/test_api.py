@@ -43,6 +43,14 @@ class CategTestCase(APITestCase):
             main_text="Main text user2"
 
         )
+        self.idea4 = Idea.objects.create(
+            title="summer time",
+            author=self.user2,
+            categ=self.category3,
+            lead_text="Summer day",
+            main_text="Main text from user2"
+
+        )
         # self.ideas = Idea.objects.annotate(an_likes=Count(
         #     Case(When(useridearelation__like=True, then=1))), avg_rate=Avg('useridearelation__rating'))
         self.cats = Category.objects.all()
@@ -55,23 +63,29 @@ class CategTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(local_serialized_data, response.data)
 
-    def test_get_idea_for_one_category(self):
+    def test_get_idea_for_category_without_children(self):
+        """set pagination class in view should be None"""
         url = reverse('cat-per-idea', kwargs={"slug": self.category1.slug})
         response = self.client.get(url)
+        print("resp ideas",response.data)
+        print("resp ideas legth",len(response.data))
         local_serialized_data = IdeaSerializer(self.category1.ideas.all(), many=True).data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(local_serialized_data, response.data)
+        self.assertEqual(len(response.data),2)
 
     def test_get_no_ideas_for_given_category(self):
-        url = reverse('cat-per-idea', kwargs={"slug": self.category4.slug})
+        """ set pagination class in view should be None"""
+        url = reverse('cat-per-idea', kwargs={"slug": self.category2.slug})
         # print("url", url)
         response = self.client.get(url)
         # print("response:", response.data)
         # local_serialized_data = IdeaSerializer(self.category3.ideas.all(), many=True).data
-        self.assertEqual(len(response.data), 0)
+        self.assertEqual(len(response.data), 2)
         self.assertEqual(response.status_code, 200)
 
     def test_get_404_for_not_existed_category(self):
         url = reverse('cat-per-idea', kwargs={"slug": "hghghghghghutut123"})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+

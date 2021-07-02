@@ -1,12 +1,13 @@
-import authAPI from '@/api/idea'
+import ideaAPI from '@/api/idea'
 
 const state = {
     data:null,
     isLoading:false,
-    error:null,
+    error:null,    
+    // pagination          
     count:0,
     prev:'',
-    next:''          
+    next:'',
     
 }
 
@@ -14,15 +15,21 @@ export const mutationTypes = {
     SET_IDEAS_LOADING:'[ideas] Load ideas start',
     GET_IDEAS_SUCCESS:'[ideas] Get ideas success',
     GET_IDEAS_FAILURE:'[ideas] Get ideas failure',
+    // GET_TERM_LOOKUP:'[ideas] Get lookUp search',
+    SEARCH_IDEAS_LOADING:'[ideas] Search ideas start',
+    SEARCH_IDEAS_SUCCESS:'[ideas] Search ideas success',
+    SEARCH_IDEAS_FAILURE:'[ideas] search ideas failure',
     SET_COUNT:'[ideas] Set ideas count',
     SET_PREV:'[ideas] Set ideas prev',
-    SET_NEXT:'[ideas] Set ideas next',   
+    SET_NEXT:'[ideas] Set ideas next',  
+     
        
 
 }
 
 export const actionTypes = {
-    getIdeas:'[ideas] Get ideas'
+    getIdeas:'[ideas] Get ideas',
+    searchIt:'[ideas] Make search in ideas'
 }
 
 const getters = {
@@ -31,11 +38,11 @@ const getters = {
 const actions = {
     async [actionTypes.getIdeas]({commit},{apiUrl}){
         // console.log("store dispatching getIdeas")
-        console.log("api url is",apiUrl)
+        console.log("api url in store is",apiUrl)
         commit(mutationTypes.SET_IDEAS_LOADING);
         try{
             // instead of apiUrl(str)=> {object, к можно деструктурировать}
-           const resp = await authAPI.getIdeas(apiUrl)            
+           const resp = await ideaAPI.getIdeas(apiUrl)            
             console.log("response getIdeas is",resp.data)
             commit(mutationTypes.GET_IDEAS_SUCCESS,resp.data.results)
             commit(mutationTypes.SET_NEXT,resp.data.next)
@@ -47,7 +54,8 @@ const actions = {
             console.log("error by getIdea request",err)
             commit(mutationTypes.GET_IDEAS_FAILURE)
         }          
-  },
+    },
+
 }
 const mutations = {
     [mutationTypes.SET_IDEAS_LOADING](state){
@@ -72,6 +80,9 @@ const mutations = {
     },     
     [mutationTypes.SET_NEXT](state,next){        
         state.next = next
+    },      
+    [mutationTypes.GET_TERM_LOOKUP](state,term){        
+        state.lookUp = term
     },      
     
 }

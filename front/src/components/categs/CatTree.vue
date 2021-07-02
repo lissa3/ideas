@@ -39,19 +39,19 @@ export default {
   }, 
   methods: {    
      
-    async getCatIdeas(catSlug) {
-      // gives a list of ideas for a specific category
-      try{
-       console.log("getting categ idea",catSlug)
-      }
-      catch(err){
-        console.log("store: error in category ideas");
-      }
-    },
+    // async getCatIdeas(catSlug) {
+    //   // gives a list of ideas for a specific category
+    //   try{
+    //    console.log("getting categ idea",catSlug)
+    //   }
+    //   catch(err){
+    //     console.log("store: error in category ideas");
+    //   }
+    // },
     
   },
   created(){
-    console.log("Cat Tree component is created")
+    // console.log("Cat Tree component is created")
   }
 };
 </script>

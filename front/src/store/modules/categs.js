@@ -32,28 +32,25 @@ const mutations = {
 const actions = {
     async [actionTypes.getCategs]({commit}){    
         // data from djoser:userId,
-        console.log("inside getCategs") 
+        // console.log("inside getCategs") 
         commit(mutationTypes.LOADING_CATEGS);  
         try{
           // commit(mutationTypes.GET_CURRENT_USER_START)   
-          console.log("trying to fetch cats")
+        //   console.log("trying to fetch cats")
           const resp= await getCateg.getCategTree()
-          console.log("got categs",resp.data)
+        //   console.log("got categs",resp.data)
           if(resp.status === 200){                         
             commit(mutationTypes.GET_CATEGS_SUCCESS,resp.data)            
             return resp.data      
             }
           }
           catch(err){
-            console.log("can't fetch categs",err)
+            // console.log("can't fetch categs",err)
             commit(mutationTypes.GET_CATEGS_FAILURE,err)
             
           }
         },
 }
-
-
-
 
 export default {
     state,

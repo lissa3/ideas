@@ -45,9 +45,9 @@ export default {
     },
       
   },
-  created(){
-    console.log("Node tree comp is created")
-  }
+  // created(){
+  //   console.log("Node tree comp is created")
+  // }
 };
 </script>
 

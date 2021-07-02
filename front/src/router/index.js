@@ -7,6 +7,7 @@ import Google from '@/views/auth/Google'
 import GoogleForm from '@/views/auth/GoogleForm'
 import Home from "@/views/Home";
 import IdeaGeneral from '@/views/IdeaGeneral'
+import IdeaSearch from '@/views/IdeaSearch'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
 import SignUp from "@/views/auth/SignUp";
@@ -76,9 +77,9 @@ const routes = [
     component: CategIdeas
   },
   {
-    path: '/idea/detail/:slug',
-    name: 'detailIdea',
-    component: IdeaGeneral
+    path: '/idea/search/:term',
+    name: 'search',
+    component: IdeaSearch
   },
   {
     path: '/idea/detail/:slug/edit',

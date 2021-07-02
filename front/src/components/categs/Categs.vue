@@ -1,6 +1,7 @@
 <template>
     <section >
-        <div v-if="isLoading"><app-loader></app-loader></div>        
+        <!-- TODO: error not found isLoading -->
+        <!-- <div v-if="isLoading"><app-loader></app-loader></div>         -->
         <div  class="categ-list">
             <div class="section-categs">Categories:</div>
             <p>{{isLoading}}</p>
@@ -8,6 +9,7 @@
                     
         </div>
         <div v-if="error">Smth went wrong</div>
+        <p>test2</p>
     </section>
 </template>
                 
@@ -15,13 +17,13 @@
 <script>
 import AppCategTree from '@/components/categs/CatTree'
 
-import AppLoader from '@/components/Loader'
+// import AppLoader from '@/components/Loader'
 import {actionTypes} from '@/store/modules/categs'
 import {mapState} from 'vuex'
 export default {
     name:'AppCategs',
     components:{
-        AppLoader
+        // AppLoader
     },
     data(){
         return {

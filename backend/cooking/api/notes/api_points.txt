@@ -29,3 +29,6 @@ GET localhost:8000/api/v1/tags/'
 GET localhost:8000/api/v1/tags/slug/                (ideas for a given tag)
 
 ///GET localhost:8000/api/v1/tags/name/????
+
+G Search ideas
+GET localhost:8000/api/v1/idea-collection/ideass/?search=yourWord

@@ -24,10 +24,9 @@
             <router-link :to="{ name: 'google' }" class="link-decor" active-class="active"
               >Login via Google</router-link>
         </b-nav-item>
-      </template>
-       
+      </template>       
 
-        <b-nav-item href="#"><router-link :to="{ name: 'ideaGeneral' }" class="link-decor" active-class="active"
+      <b-nav-item href="#"><router-link :to="{ name: 'ideaGeneral' }" class="link-decor" active-class="active"
               >Ideas</router-link></b-nav-item>
 
       </b-navbar-nav>
@@ -35,8 +34,8 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+          <b-form-input v-model="term" size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+          <b-button @click="doSearch(term)" size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>       
       <template v-if="isLoggedIn">
         <b-nav-item href="#">Link</b-nav-item>
@@ -67,10 +66,16 @@
 </template>
 <script>
 import {actionTypes} from '@/store/modules/auth'
+// import {actionTypes as ideaActionTypes} from '@/store/modules/ideas'
 import {getterTypes} from '@/store/modules/auth'
 import {mapGetters} from 'vuex'
 export default {
     name:'Menu',
+    data(){
+      return {
+        term:''
+      }
+    },
     computed:{
       ...mapGetters({
         currentUser:getterTypes.currentUser,
@@ -87,6 +92,10 @@ export default {
         // console.log("Sign out...")
         this.$store.dispatch( actionTypes.signOut)
         location.reload();
+      },
+      doSearch(term){
+        this.$router.push({name:'search',params:{term:this.term}})       
+        this.term = ''
       }
     },
     mounted(){

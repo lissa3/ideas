@@ -56,12 +56,12 @@ const getters = {
   },
   [getterTypes.isLoggedIn]:state=>{
     // scheiden false|null
-    console.log("getter isLoggedIn",Boolean(state.isLogIn))
+    // console.log("getter isLoggedIn",Boolean(state.isLogIn))
     return Boolean(state.isLogIn)
   },
   [getterTypes.isAnonymous]:state=>{
     // scheiden false|null
-    console.log("getter isAnonym",state.isLogIn===null)
+    // console.log("getter isAnonym",state.isLogIn===null)
     return state.isLogIn === null
   }
 }
@@ -81,7 +81,7 @@ const mutations = {
     
   },
   [mutationTypes.PASS_EMAIL_POTENTIAL_USER](state,email) {
-    console.log("inside mutation PASS EMAIL POT USER with email",email)
+    // console.log("inside mutation PASS EMAIL POT USER with email",email)
     state.showEmailCheck=email;
   },
   [ mutationTypes.REGISTER_FAILURE](state){
@@ -136,7 +136,7 @@ const actions = {
             netWorkErr:[]
             };      
         const resp = await authAPI.register(creds)        
-          console.log("response is",resp) //.config,.data (f_name,l_name,email),status=201
+          //console.log("response is",resp) //.config,.data (f_name,l_name,email),status=201
           servResp.status = resp.status;
           console.log('in store action register status is:',resp.status)
           servResp.email = resp.data.email;     
@@ -152,12 +152,12 @@ const actions = {
       .then((resp)=>{
         // dj server response == 204        
         commit(mutationTypes.SET_CONFIRM);
-        console.log("msg from store: email confirmed")
+        //console.log("msg from store: email confirmed")
         status = resp.status
         resolve(status)
       })
       .catch((err)=>{
-        console.log("err during email confirmation");
+        //console.log("err during email confirmation");
         status = err.response.status;
         commit('REGISTER_FAILURE')
         reject(status)
@@ -169,7 +169,7 @@ const actions = {
     console.log("msg from store... func login")
     try{
     const resp = await authAPI.login(creds)         
-        console.log("got from server",resp) 
+        //console.log("got from server",resp) 
         if(resp.status ===200){   
           console.log("making mutaions in store")     
           commit(mutationTypes.SET_LOGIN_SUCCESS)  
@@ -182,10 +182,10 @@ const actions = {
             
         return resp
     }  catch(err){
-        console.log("store passes this error to component:",err)           
+        //console.log("store passes this error to component:",err)           
         commit('SET_LOGIN_FAILURE')
         localStorage.clear()
-        console.log("login failed and Local storage is cleaned")        
+        //console.log("login failed and Local storage is cleaned")        
         return err
       }
     
@@ -193,7 +193,7 @@ const actions = {
   
   async [actionTypes.getUser]({commit}){    
     // data from djoser:userId,
-    console.log("inside getUser")   
+    //console.log("inside getUser")   
     try{
       // commit(mutationTypes.GET_CURRENT_USER_START)   
       const resp= await authAPI.getUser()
@@ -212,7 +212,7 @@ const actions = {
     },
     
     [actionTypes.signOut]({commit}){
-      console.log("store starts sign out")
+      //console.log("store starts sign out")
       commit(mutationTypes.CLEAR_CREDS)
       console.log("local storage is clear")
     }

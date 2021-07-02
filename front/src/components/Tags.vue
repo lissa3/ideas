@@ -1,14 +1,17 @@
 <template>
-    <section >
-        <div v-if="isLoading"><app-loader></app-loader></div>        
-        <div v-if="tags" class="tag-list">
-            <router-link v-for="tag in tags" :key="tag.id" :to="{name:'tag',params:{slug:tag.slug}}" class="tag">
-                <b-badge variant="secondary" class="tag px-2 mx-1">{{tag.name}}</b-badge>          
-            </router-link> 
-                    
-        </div>
-        <div v-if=error>Smth went wrong</div>
-    </section>
+    <div>
+        <section >
+            <div v-if="isLoading"><app-loader></app-loader></div>        
+            <div v-if="tags" class="tag-list">
+                <router-link v-for="tag in tags" :key="tag.id" :to="{name:'tag',params:{slug:tag.slug}}" class="tag">
+                    <b-badge variant="secondary" class="tag px-2 mx-1">{{tag.name}}</b-badge>          
+                </router-link> 
+                        
+            </div>
+            <div v-if=error>Smth went wrong</div>
+        </section>
+        
+    </div>    
 </template>
                 
                 
@@ -19,8 +22,8 @@ import AppLoader from '@/components/Loader'
 export default {
     name:'AppTags',
     components:{
-        AppLoader
-    },
+        AppLoader,
+    },    
     mounted(){
         this.$store.dispatch(actionTypes.getTags)
         

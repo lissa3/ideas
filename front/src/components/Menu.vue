@@ -35,7 +35,7 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
           <b-form-input v-model="term" size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-          <b-button @click="doSearch(term)" size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+          <b-button @click="doSearch" size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>       
       <template v-if="isLoggedIn">
         <b-nav-item href="#">Link</b-nav-item>
@@ -93,7 +93,7 @@ export default {
         this.$store.dispatch( actionTypes.signOut)
         location.reload();
       },
-      doSearch(term){
+      doSearch(){
         this.$router.push({name:'search',params:{term:this.term}})       
         this.term = ''
       }

@@ -16,7 +16,7 @@ from rest_framework.response import Response
 
 
 from django_filters.rest_framework import DjangoFilterBackend # third party
-from api.filters import IdeaFilter
+# from api.filters import IdeaFilter
 
 from ideas.models import Idea, UserIdeaRelation
 
@@ -52,6 +52,7 @@ class IdeaRelations(UpdateModelMixin, viewsets.GenericViewSet):
 
 class IdeaViewSet(viewsets.ModelViewSet):
     """ custom filter:'title','categ','featured','status','author;
+    odrering default: -created at = newest on top
     pagination for tests should be None
     """
     serializer_class = IdeaSerializer
@@ -59,7 +60,7 @@ class IdeaViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     parser_classes = (FormParser, MultiPartParser)
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = IdeaFilter 
+    filterset_fields = ['featured','view_count']
     search_fields = ['title', 'lead_text', 'main_text']
     
     ordering = ('title','created_at')

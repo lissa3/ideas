@@ -52,11 +52,13 @@ class IdeasPerCategListView(generics.ListAPIView):
     for tests pagination_class = None
     """
     serializer_class = IdeaSerializer
-    pagination_class = None
+    # pagination_class = None
     
     def get_queryset(self):
         slug = self.kwargs.get('slug')
         categ = get_object_or_404(Category, slug=slug)
+        # qs = Idea.objects.filter(categ = categ)
+        # print("qs",qs)
         if categ.children:
             categ_descend = categ.get_descendants(include_self=True)
             qs = Idea.objects.filter(categ__in =categ_descend)

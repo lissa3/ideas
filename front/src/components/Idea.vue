@@ -121,12 +121,8 @@ export default {
         },
         offset() {
          return this.currentPage * limit - limit
-        },
-        
-        
-       
-
-              
+        },      
+                  
     },    
     watch: {
         currentPage() {

@@ -1,37 +1,38 @@
 <template>
-    <section >
-        <!-- TODO: error not found isLoading -->
-        <!-- <div v-if="isLoading"><app-loader></app-loader></div>         -->
-        <div  class="categ-list">
-            <div class="section-categs">Categories:</div>
-            <p>{{isLoading}}</p>
-            <app-categ-tree :treeData="categs"></app-categ-tree>         
-                    
-        </div>
-        <div v-if="error">Smth went wrong</div>
-        <p>test2</p>
-    </section>
+    <div>
+        <section >           
+            <div v-if="isLoading"><app-loader></app-loader></div>        
+            <div  class="categ-list">
+                <div class="section-categs">Categories:</div>
+                <app-categ-tree :treeData="categs"></app-categ-tree>                       
+            </div>
+            <div v-if="error">Smth went wrong</div>            
+        </section>
+        <section>
+            <app-user-filter></app-user-filter>            
+        </section>
+    </div>    
 </template>
                 
                 
 <script>
 import AppCategTree from '@/components/categs/CatTree'
 
-// import AppLoader from '@/components/Loader'
+import AppUserFilter from '@/components/UserFilter'
+import AppLoader from '@/components/Loader'
 import {actionTypes} from '@/store/modules/categs'
 import {mapState} from 'vuex'
 export default {
     name:'AppCategs',
-    components:{
-        // AppLoader
-    },
     data(){
         return {
            
         }
     },
     components:{
-        AppCategTree
+        AppCategTree,
+        AppLoader,
+        AppUserFilter
     },
     created(){
         this.$store.dispatch(actionTypes.getCategs)

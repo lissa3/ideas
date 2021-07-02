@@ -1,9 +1,9 @@
-from django_filters import rest_framework as dj_filters    
-from ideas.models import Idea
+# from django_filters import rest_framework as dj_filters    
+# from ideas.models import Idea
 
-class IdeaFilter(dj_filters.FilterSet):
-    title = dj_filters.CharFilter(lookup_expr='icontains')
+# class IdeaFilter(dj_filters.FilterSet):
+#     title = dj_filters.CharFilter(lookup_expr='icontains')
        
-    class Meta:
-        model = Idea
-        fields = ('title','categ','featured','status','author')
+#     class Meta:
+#         model = Idea
+#         fields = ('featured','title')

@@ -38,8 +38,10 @@ const actions = {
           // commit(mutationTypes.GET_CURRENT_USER_START)   
           const resp= await fetchTags.getTags()
         //   console.log("got tags",resp.data)
-          if(resp.status === 200){                         
-            commit(mutationTypes.GET_TAGS_SUCCESS,resp.data)            
+          if(resp.status === 200){ 
+            console.log("got tags is OK")                        
+            commit(mutationTypes.GET_TAGS_SUCCESS,resp.data) 
+            // commit(mutationTypes.GET_TAGS_FAILURE,err=null)           
             return resp.data      
             }
           }

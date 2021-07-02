@@ -8,6 +8,7 @@ import GoogleForm from '@/views/auth/GoogleForm'
 import Home from "@/views/Home";
 import IdeaGeneral from '@/views/IdeaGeneral'
 import IdeaSearch from '@/views/IdeaSearch'
+import IdeaFilter from '@/views/IdeaFilter'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
 import SignUp from "@/views/auth/SignUp";
@@ -58,12 +59,12 @@ const routes = [
     name: 'ideaGeneral',
     component: IdeaGeneral
   },
-  {
-    // render all favorite ideas//????
-    path: '/idea',
-    name: 'idea',
-    component: IdeaGeneral
-  },
+  // {
+  //   // render all favorite ideas//????
+  //   path: '/idea',
+  //   name: 'idea',
+  //   component: IdeaGeneral
+  // },
   {
     // to render all ideas for a given tag
     path: '/tags/:slug',
@@ -82,9 +83,9 @@ const routes = [
     component: IdeaSearch
   },
   {
-    path: '/idea/detail/:slug/edit',
-    name: 'edit-idea',
-    component: IdeaGeneral
+    path: '/idea/filter/:sort/:featured',
+    name: 'filter',
+    component: IdeaFilter
   },
   {
     path: '/settings',

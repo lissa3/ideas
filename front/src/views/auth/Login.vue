@@ -1,24 +1,33 @@
 <template>
     <div class="container">
       <div class="flash-msg"></div>
-         <div class="row">            
-            <div class="col col-md-10" >
-              <b-form @submit.prevent="onSubmit">     
-     
+         <div class="row mx-auto  my-5 main-login">            
+            <div class="col col-md-10 col-sm-6 py-3" >
+              <b-form @submit.prevent="onSubmit"> 
+<!-- email  -->
                 <b-form-group
                   id="input-group-1"
-                  class="mb-1"
+                  label="Email"
                   label-for="input-1"
                   description="We'll never share your email with anyone else."
-                >
+                >               
                   <b-form-input
                     id="input-1"
-                    v-model="email"
+                    v-model.trim="email"
                     type="email"
-                    placeholder="Enter email"          
+                    placeholder="Enter email"
+                    :class="{ 'is-invalid warning': this.$v.email.$error }"
+                    @blur="$v.email.$touch()"           
                   ></b-form-input>
-                </b-form-group>
-                <!-- server errors: email errors -->
+                                            
+<!-- front-side errors email-->            
+                <b-form-invalid-feedback v-if="emailRequired" 
+                  >{{ fieldRequired }}
+                </b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="inValidEmail" 
+                  >This field should be a valid email</b-form-invalid-feedback>
+            </b-form-group>                  
+<!-- server errors: email errors -->
                 <div class="warn mb-1" v-if="emailErr">
                   <ul>
                     <li v-for="err in emailErr" :key="err.id">
@@ -26,15 +35,31 @@
                     </li>
                   </ul>
                 </div>
-                <b-form-group id="input-group-5"  label-for="input-3" class="mb-2">
+<!-- password-->
+                <b-form-group id="input-group-2"  
+                label="Password" label-for="input-2" class="mb-2">
+                <div class="row border" >                
+                <div class="col-md-10 border-0">
                   <b-form-input
-                    id="input-5"
-                    type="password"
-                    v-model="psw"
+                    id="input-2"
+                    :type="showPassword ? 'text' : 'password'"
+                    @blur="$v.psw.$touch()"
+                    :class="{ 'is-invalid warning': this.$v.psw.$error }"                      
+                    v-model.trim="psw"
                     placeholder="Enter password"          
                   ></b-form-input>
+                </div>
+                <div class="col-md-2 border-0 pt-1 point-it">
+                  <span><b-icon-eye @click="toggleShowPws" /></span>
+                  
+                </div>  
+                </div>
+<!-- front side password errors -->
+                <b-form-invalid-feedback v-if="pswRequired" class="invalid-feedback"
+                  >{{ fieldRequired }}
+                </b-form-invalid-feedback>
                 </b-form-group>   
-                <!-- server errors: password errors -->
+<!-- server errors: password errors -->
                 <div class="warn mb-1" v-if="pswErr">
                   <ul>
                     <li v-for="err in pswErr" :key="err.id">
@@ -42,7 +67,7 @@
                     </li>
                   </ul>
                 </div>   
-                <!-- server errors: non-field errors -->
+<!-- server errors: non-field errors -->
                 <div class="warn mb-1" v-if="nonFieldErr">
                   <ul>
                     <li v-for="err in nonFieldErr" :key="err.id">
@@ -65,7 +90,8 @@
                 </div>
                 <b-row class="text-center">
                   <b-col cols="6">
-                    <b-button type="submit" variant="primary">Submit</b-button>
+                    <b-button type="submit" 
+                    :disabled="formInValid" variant="primary">Submit</b-button>
                   </b-col >       
                 </b-row>
             </b-form> 
@@ -78,6 +104,8 @@
 </template>
 
 <script>
+
+import {required, email}  from "vuelidate/lib/validators";
 import {actionTypes} from '@/store/modules/auth'
 export default {
     name:'AppLogin',
@@ -93,8 +121,30 @@ export default {
         netWorkErr:null,
         unAuthorized:null,
         finalErr:false,
-        successMsg:''
+        successMsg:'',
+        // front valid 
+        fieldRequired: "This field is required",
+        // toggle password visiabilty
+        showPassword: false, 
       } 
+    },
+     validations: {
+    email: { required, email },
+    psw: { required },
+    },
+    computed:{
+      formInValid() {
+      return this.$v.$invalid;
+    },
+    pswRequired() {
+      return this.$v.psw.$dirty && !this.$v.psw.required;
+    },
+    emailRequired() {
+      return this.$v.email.$dirty && !this.$v.email.required;
+    },
+    inValidEmail() {
+      return this.$v.email.$dirty && !this.$v.email.email;
+    },
     },
      methods:{
        onSubmit(){
@@ -138,7 +188,10 @@ export default {
              alert("A server/network error occured.Sorry about this - we will get it fixed shortly. ");
                           
            })          
-       }
+       },
+       toggleShowPws() {
+      this.showPassword = !this.showPassword;
+    },
      }  
 }
 </script>
@@ -152,5 +205,14 @@ export default {
 }
 .flesh-msg{
   background-color: darkgoldenrod;
+}
+.main-login {
+  padding:2rem;
+  background-color: blanchedalmond;
+  box-shadow: 0 0 10px 10px rgba(0,0,0,.05);
+  border-radius: 0.5rem;
+} 
+.point-it{
+  cursor: pointer;
 }
 </style>

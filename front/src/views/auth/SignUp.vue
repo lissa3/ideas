@@ -7,14 +7,14 @@
 <!-- username  -->
             <b-form-group
                 id="input-group-1"
-                label="Username"
-                label-for="input-1"
                 description="Username should be at least 2 chars long"
-                class="form-group required"
-              > 
+                class="required"                
+              >
+            <label id="input-group-1" class="control-label">Username</label>   
             <b-form-input
                 id="input-1"
                 type="text"
+                class="need"
                 :class="{ 'is-invalid warning': this.$v.username.$error,'form-control':true, }"
                 @blur="$v.username.$touch()"      
                 v-model.trim="username"
@@ -42,11 +42,10 @@
             </div> 
 <!-- email -->
             <b-form-group
-                id="input-group-2"
-                label="Email address:"
-                label-for="input-2"
+                id="input-group-2" class="required"
                 description="We'll never share your email with anyone else."
               >
+              <label id="input-group-2" class="control-label">Email</label> 
               <b-form-input
                 id="input-2"
                 v-model.trim="email"            
@@ -73,13 +72,12 @@
 
 <!-- psw -->
           <b-form-group
-                id="input-group-3"
-                label="Password:"
-                label-for="input-3"
+                id="input-group-3" class="required"                
                 description="Password should contain at least one capital letter: (A-Z); at least one digit: 0-9; at least one special character (! @ $ % #) and be at least 6 chars long"                
               >
+              <label id="input-group-3" class="control-label">Password</label> 
                <div class="row border">
-                <div class="col-md-10 border-0">
+                <div class="col-md-10 sync">
                   <b-form-input
                     id="input-3"
                     v-model.trim="psw"
@@ -88,7 +86,7 @@
                     :class="{ 'is-invalid warning': this.$v.psw.$error }"          
                   ></b-form-input>
                 </div>
-                <div class="col-md-2 border-0 pt-1 point-it">
+                <div class="col-md-2  pt-1 point-it">
                 <span ><b-icon-eye @click="toggleShowPws" /></span>
               </div>
               </div>
@@ -118,10 +116,8 @@
             </div>            
 <!-- re-psw -->
             <b-form-group
-                id="input-group-4"
-                label="Password confirmation"
-                label-for="input-4"                
-              >             
+                id="input-group-4" class="required"> 
+              <label id="input-group-4" class="control-label">Confirm password</label>             
               <b-form-input
                 id="input-4"
                 type="password"
@@ -151,13 +147,14 @@
             </div>
 <!-- accept rules -->
             <div>
+              <!-- <label id="checkbox-1" class="control-label">Username</label>  -->
               <b-form-checkbox
                 id="checkbox-1"
                 v-model="status"
                 name="checkbox-1"
                 value="accepted"
                 unchecked-value="not_accepted"
-                class="control-lable"
+                class="control-label"
                 @blur="$v.state.$touch()"
               >
                 I accept the rules
@@ -354,10 +351,17 @@ export default {
   border-radius: 0.5rem;
 } 
 
-.form-group.required .control-lable::after {
+/* .form-group.required .control-label::after {
+  content: " *";
+  color: red;
+} */
+
+.control-label::after {
   content: " *";
   color: red;
 }
+
+
 .red {
   color: red;
 }
@@ -368,6 +372,15 @@ export default {
   color: red;
   text-align: left;
   font-size: 0.8rem;
+}
+.point-it{
+  cursor: pointer;
+  background-color: white;
+  text-align: center;
+}
+.border{
+  display: flex;
+  margin: 0px;
 }
 
 

@@ -1,8 +1,8 @@
 <template>
     <div class="container">
       <div class="flash-msg"></div>
-         <div class="row mx-auto  my-5 main-login">            
-            <div class="col col-md-10 col-sm-6 py-3" >
+        <div class="row mx-auto  my-5 main-login">            
+            <div class="col col-md-10 col-sm-6 py-3" > 
               <b-form @submit.prevent="onSubmit"> 
 <!-- email  -->
                 <b-form-group
@@ -18,8 +18,7 @@
                     placeholder="Enter email"
                     :class="{ 'is-invalid warning': this.$v.email.$error }"
                     @blur="$v.email.$touch()"           
-                  ></b-form-input>
-                                            
+                  ></b-form-input>                                            
 <!-- front-side errors email-->            
                 <b-form-invalid-feedback v-if="emailRequired" 
                   >{{ fieldRequired }}
@@ -39,7 +38,7 @@
                 <b-form-group id="input-group-2"  
                 label="Password" label-for="input-2" class="mb-2">
                 <div class="row border" >                
-                <div class="col-md-10 border-0">
+                <div class="col-md-10">
                   <b-form-input
                     id="input-2"
                     :type="showPassword ? 'text' : 'password'"
@@ -88,16 +87,19 @@
                 <div class="flesh-msg mb-3" v-if="successMsg">
                   <div>{{successMsg}}</div>
                 </div>
-                <b-row class="text-center">
+                <b-row >
                   <b-col cols="6">
                     <b-button type="submit" 
-                    :disabled="formInValid" variant="primary">Submit</b-button>
+                    :disabled="formInValid" variant="success">Submit</b-button>
                   </b-col >       
                 </b-row>
+            <p class="mt-3">Not registed?<span class="mute-link"><router-link :to='{name:"signup"}'>Sign Up</router-link></span>  </p>
+        <p class="mt-3">Forgot yout password?<span class="mute-link"><a href="#">Here</a></span></p>    
+        
+           
             </b-form> 
-        <p class="mt-3">Not registed?<span class="mute-link"><router-link :to='{name:"signup"}'>Sign Up</router-link></span>
-        </p>
-        <p class="mt-3">Forgot yout password?<span class="mute-link"><a href="#">Here</a></span></p>               
+        <!-- <p class="mt-3">Not registed?<span class="mute-link"><router-link :to='{name:"signup"}'>Sign Up</router-link></span>  </p>
+        <p class="mt-3">Forgot yout password?<span class="mute-link"><a href="#">Here</a></span></p> -->
       </div>
     </div>
   </div>         
@@ -207,6 +209,7 @@ export default {
   background-color: darkgoldenrod;
 }
 .main-login {
+
   padding:2rem;
   background-color: blanchedalmond;
   box-shadow: 0 0 10px 10px rgba(0,0,0,.05);
@@ -214,5 +217,14 @@ export default {
 } 
 .point-it{
   cursor: pointer;
+  background-color: white;
+  margin-left: 0px;
+  text-align: center;
 }
+.border{
+  display: flex;
+  margin: 0px;
+}
+
+
 </style>

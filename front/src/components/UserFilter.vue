@@ -34,7 +34,7 @@
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                        <input v-model="onFront" value="True" type="checkbox" aria-label="Featured">
+                        <input v-model="featurePlus" value="True" type="checkbox" aria-label="Featured">
                         </div>
                     </div>
                     <input type="text" class="form-control" aria-label="Text input with checkbox"
@@ -54,7 +54,7 @@ export default {
     data(){
         return {
             userChoice:null,
-            onFront:null                     
+            featurePlus:false                     
         }
     },
     computed:{
@@ -70,14 +70,15 @@ export default {
                 return "-title"
             }
         },
-        getFront(){
-            return this.onFront            
+        showFeatured(){
+            return this.featurePlus
+                                  
         }
     },
     methods:{
         sortIt(){          
             console.log("param to url for ordering:",this.passUserChoice)
-            this.$router.push({name:'filter',params:{sort:this.passUserChoice,featured:this.getFront}}) 
+            this.$router.push({name:'filter',params:{sort:this.passUserChoice,featured:this.showFeatured}}) 
         },
         reset(){
             this.userChoice=null,

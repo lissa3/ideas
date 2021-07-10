@@ -12,7 +12,8 @@ export default {
   name: 'AppHome',
   components:{
     AppBanner
-  }
+  },
+  
   
 }
 </script>

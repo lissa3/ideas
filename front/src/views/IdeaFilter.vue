@@ -39,8 +39,8 @@ export default {
         console.log("params are",this.$route.params.featured)
         return this.$route.params.featured
     },
-    apiUrl(){
-           
+    apiUrl(){           
+          // return `/api/v1/ideas-collection/ideas/?ordering=${this.sortBy}`
           return `/api/v1/ideas-collection/ideas/?ordering=${this.sortBy}&featured=${this.filterBy}`
     }
   }    

@@ -5,7 +5,7 @@
             <div class="row main-row" v-for="idea in ideas" :key="idea.id">
                 <div   class="col-lg-4 col-md-12 col-sm-12">
                     <div class="idea-img mb-2">
-                        <img src="../assets/logo.png" alt="img" class="img-fluid">
+                        <img src="@/assets/logo.png" alt="img" class="img-fluid">
                     </div>
                     <div class="row">
                         <div class="col-sm-12 mb-2">
@@ -139,10 +139,12 @@ export default {
     },
     methods:{
         fetchIdeas(){
+            console.log("looking for bible...")
             const parsedUrl = parseUrl(this.apiUrl)
-            console.log("parsedUrl",parsedUrl)
-            console.log("parsedUrl.url:   ",parsedUrl.url)
-            console.log("parsedUrl.query:  ",parsedUrl.query)
+            // console.log("step 1 parsed url:",parsedUrl)
+            // console.log("parsedUrl",parsedUrl)
+            // console.log("parsedUrl.url:   ",parsedUrl.url)
+            // console.log("parsedUrl.query:  ",parsedUrl.query)
 
             const stringifiedParams = stringify({
                 limit,
@@ -150,7 +152,9 @@ export default {
                 ...parsedUrl.query
             })
             const apiUrlWithParams = `${parsedUrl.url}?${stringifiedParams}`
-            // const apiUrlWithParams = `${parsedUrl.url}`            
+            
+            console.log("calling store func for request")           
+            //this.$store.dispatch(actionTypes.getIdeas, {apiUrl: this.apiUrl})       
             this.$store.dispatch(actionTypes.getIdeas, {apiUrl: apiUrlWithParams})       
             },
     },    

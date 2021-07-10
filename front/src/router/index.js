@@ -108,9 +108,11 @@ const routes = [
     component: IdeaSearch
   },
   {
+    // path: '/idea/:sort/',
     path: '/idea/filter/:sort/:featured',
     name: 'filter',
-    component: IdeaFilter
+    component: IdeaFilter,
+   
   },
   {
     path: '/settings',

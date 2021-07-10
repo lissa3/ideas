@@ -14,7 +14,17 @@ const login = (creds)=>{
 const getUser = ()=>{
     return axios.get('/auth/users/me/')
 }
-
+// link for new psw instead og forgotten
+const confirmEmailPswForget = (creds)=>{
+    return axios.post('/auth/users/reset_password/',creds)
+}
+const requestNewPsw = (creds)=>{
+    return axios.post('/auth/users/reset_password_confirm/',creds)
+}
+// link to change current psw 
+const requestChangePsw = (creds)=>{
+    return axios.post('/auth/users/set_password/',creds)
+}
 
 const registerGoogle = ()=>{
     console.log("api auth prepares url to send ")
@@ -53,6 +63,10 @@ export default {
     login,
     getUser,
     registerGoogle,
-    googleAuth
+    googleAuth,
+    confirmEmailPswForget,
+    requestNewPsw,
+    requestChangePsw
+    
 
 }    

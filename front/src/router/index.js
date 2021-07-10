@@ -12,7 +12,12 @@ import IdeaFilter from '@/views/IdeaFilter'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
 import SignUp from "@/views/auth/SignUp";
+import PswForgotStart from "@/views/auth/PswForgotStart";
+import SetPswReset from '@/views/auth/PswReset'
+import SetPswChange from '@/views/auth/ChangePsw'
+import PswForgotFailure from "@/views/auth/MsgPswResetFailure";
 import TagIdeas from '@/views/TagIdeas'
+import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
 
@@ -21,8 +26,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
-  }, 
-
+  },
   {
     path: "/signup",
     name: "signup",
@@ -53,6 +57,27 @@ const routes = [
     name: "activate",
     component: Activate,
     props:true
+  },
+  {
+    path: "/reset-password/",
+    name: "resetForgotPsw",
+    component: PswForgotStart,
+  },
+  {
+    path: "/password/reset/confirm/:uid/:token",
+    name: "setPswReset",
+    component: SetPswReset,
+    props:true
+  },
+  {
+    path: "/change-password/",
+    name: "passwordChange",
+    component: SetPswChange,
+  },
+  {
+    path: "/reset-password-failure/",
+    name: "resetForgotPswFailure",
+    component: PswForgotFailure,
   },
   {
     path: '/general-ideas',
@@ -109,7 +134,12 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  },
+  {
+    path: '*',
+    name: 'notFound',
+    component: NotFound
+  },
 ]
 
 const router = new VueRouter({

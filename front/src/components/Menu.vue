@@ -46,17 +46,18 @@
               <b-nav-item href="#" >
                 <b-icon icon="person-fill"></b-icon>
                 <a href="#" class="link-decor" >Welcome, &nbsp;{{currentUser.username}}</a>
-              </b-nav-item> 
-
-      </template>
-        <b-nav-item-dropdown right>
+              </b-nav-item>
+          <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
             <em>User</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-        </b-nav-item-dropdown>
+            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item href="#" @click="changePsw">Change Password</b-dropdown-item>
+            </b-nav-item-dropdown>  
+          </template>
+        
         
       </b-navbar-nav>
     </b-collapse>
@@ -96,6 +97,11 @@ export default {
       doSearch(){
         this.$router.push({name:'search',params:{term:this.term}})       
         this.term = ''
+      },
+      changePsw(){
+        console.log("user wants to change psw")
+        this.$router.push({name:'passwordChange'}) 
+        
       }
     },
     mounted(){

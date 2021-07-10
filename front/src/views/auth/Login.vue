@@ -93,8 +93,8 @@
                     :disabled="formInValid" variant="success">Submit</b-button>
                   </b-col >       
                 </b-row>
-            <p class="mt-3">Not registed?<span class="mute-link"><router-link :to='{name:"signup"}'>Sign Up</router-link></span>  </p>
-        <p class="mt-3">Forgot yout password?<span class="mute-link"><a href="#">Here</a></span></p>    
+            <p class="mt-3">Not registed?<span class="mute-link"><router-link :to='{name:"signup"}'>  Sign Up</router-link></span>  </p>
+        <p class="mt-3">Forgot your password?<span><router-link :to="{name:'resetForgotPsw'}"> Reset password</router-link></span></p>    
         
            
             </b-form> 
@@ -174,7 +174,8 @@ export default {
            }else if(resp.response.status === 401){
              // No active account found with the given credentials
              console.log(Object.keys(resp.response.data))
-             this.unAuthorized = resp.response.data.detail            
+             this.unAuthorized = resp.response.data.detail 
+             // serv.msg: No active account found with given creds( email OK,psw incorrect or both)          
            }else if(resp.response.status === 400){
              // This field (email/psw) may not be blank (user sent empty form)
              this.emailErr=resp.response.data.email
@@ -224,6 +225,10 @@ export default {
 .border{
   display: flex;
   margin: 0px;
+  
+}
+.border .col-md-10 {
+  padding-left:0px;
 }
 
 

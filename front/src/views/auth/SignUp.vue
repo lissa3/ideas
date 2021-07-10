@@ -126,10 +126,10 @@
                 @blur="$v.psw2.$touch()"
               :class="{ 'is-invalid warning': this.$v.psw2.$error }"         
               ></b-form-input>
-<!-- front re-psw errors -->
+<!-- front re-psw errors    -->
               <b-form-invalid-feedback
-                v-if="$v.psw2.$dirty && !$v.psw2.sameAs"
                 class="invalid-feedback"
+                v-if="$v.psw2.$dirty && !$v.psw2.sameAs"
                 >Passwords must be identical
               </b-form-invalid-feedback>
             </b-form-group>
@@ -166,11 +166,10 @@
                 <b-button type="submit"  variant="success" :disabled="$v.$invalid && $v.$error||!this.checkSelected">Submit</b-button>
               </b-col >
               <b-col cols="6">
-                <b-button type="reset" variant="danger">Reset</b-button>
+                <b-button type="reset" variant="danger" @click="getRidErr">Reset</b-button>
 
               </b-col>
-            </b-row>
-              
+            </b-row>              
           </b-form> 
           <p class="mt-3">
             Already have an account? <router-link to="/login">Login</router-link>
@@ -182,6 +181,7 @@
 
 <script>
 import {actionTypes} from '@/store/modules/auth'
+
 import { required,  email,  minLength,  maxLength,  sameAs,} from  "vuelidate/lib/validators";
 export default {
     name:'AppSignUp',
@@ -195,12 +195,14 @@ export default {
       // user should accept terms and use
       status:'not accepted',
       servResp:{
-        status:'',
+        status:null,
         usernameErr:null,
         emailErr:null,
         pswErr:null,
+        psw2Err:null,
         nonFieldErr:null,
-        netWorkErr:null
+        netWorkErr:null,
+        err500:null
       },
       //front-side vars/errors
       fieldRequired: "This field is required",
@@ -221,11 +223,13 @@ export default {
       minLength: minLength(8),
       maxLength: maxLength(128),
     },
+    
     psw2: {
       required,
        minLength: minLength(8),
       maxLength: maxLength(128),
-      sameAs: sameAs("psw"),
+      sameAs:sameAs("psw")
+      
     },
   },
   computed:{
@@ -270,17 +274,17 @@ export default {
         return lookLike
       }else{ 
         if(this.$v.psw.$dirty&&this.$v.email.$dirty){
-            console.log("starting validation on similarity")
+            // console.log("starting validation on similarity")
             const head = this.email.split("@", 1)[0].toLowerCase();
             
-            console.log(this.psw.toLowerCase().indexOf(head) >= 0)
-            console.log("true?",this.psw.toLowerCase().indexOf(head) >= 0)
+            // console.log(this.psw.toLowerCase().indexOf(head) >= 0)
+            // console.log("true?",this.psw.toLowerCase().indexOf(head) >= 0)
               if(this.psw.toLowerCase().indexOf(head) >= 0) {
               lookLike = "Email and password are too similar";
-              console.log("toooo similar....")
+              // console.log("toooo similar....")
               return lookLike;
           }else{
-            console.log("simil OK")
+            // console.log("simil OK")
             return lookLike
           }
         }      
@@ -298,37 +302,47 @@ export default {
               password:this.psw,
               re_password:this.psw2
           }).then((resp)=>{
-              console.log("got response from store")
-              if(resp.status===200||resp.status===201){
-                  this.submitStatus = 'PENDING'
+              // let op: all errors are coming here first of all              
+              console.log("resp in Singup.vue",resp)
+              if(resp.status===201||resp.status===200){
                   this.$router.push({name:"confirmEmail"})
-              }
-          }).catch((err)=>{
-              console.log("err by signup",err)
-              console.log("err by signup",Object.keys(err))
-            if(err.response===undefined&&err.toJSON().message==='Network Error'){
-            this.servResp.netWorkErr = 'Sorry. Our server is enduring some problems.Please try to create account later'
-            
-            }else if(err.response.status ===400){
-                this.servResp.status = 400
-                this.servResp.usernameErr = err.response.data.username;          
-                this.servResp.emailErr = err.response.data.email;
-                this.servResp.pswErr = err.response.data.password;
-                this.servResp.nonFieldErr = err.response.data.non_field_errors;
-            }else if(err.response.status ===404){
-                console.log("Page not found")
-            }else if(err.status===401){
-                console.log("not auth-ed")
-            }else if(err.status===500){
+              }else if(resp.servDown){
+                this.servResp.netWorkErr = 'Sorry. Our server is enduring some problems.Please try to create account later'
+              }else if(resp.status===400){
+                this.servResp.usernameErr = resp.usernameErr;          
+                this.servResp.emailErr = resp.emailErr;
+                this.servResp.pswErr = resp.pswErr;
+                this.servResp.psw2Err = resp.psw2Err;
+                this.servResp.nonFieldErr = resp.nonFieldErr;
+              }else if(resp.status===500){
+                // when urlto send req  incorrect (api)
                 console.log("server error 500")
-            }else{
-                console.log("Server can't be reach; check your internet connection, please")
+                this.servResp.netWorkErr = 'A server/network error occured.Sorry about this - we will get it fixed shortly.'
+              }else if(resp.status ===404){
+                // incorrect url vue router
+                console.log("Page not found")
+                this.$router.push({name:"notFound"})
+              }else{
+                console.log("May be: Server can't be reach; check your internet connection, please")
             }
-        })
+
+          }).catch((err)=>{
+            console.log("unknown error during sign up",err)
+            // сюда попадают все ошибки, если выше была ошибка
+            console.log(Object.keys(err))
+          })
+      
       },
       toggleShowPws() {
       this.showPassword = !this.showPassword;
     },
+    getRidErr(){
+      this.servResp.usernameErr=null      
+      this.servResp.emailErr=null      
+      this.servResp.pswErr=null      
+      this.servResp.netWorkErr=null      
+      this.servResp.err500=null      
+    }    
     
   }
 }
@@ -381,6 +395,9 @@ export default {
 .border{
   display: flex;
   margin: 0px;
+}
+.border .col-md-10 {
+  padding-left:0px;
 }
 
 

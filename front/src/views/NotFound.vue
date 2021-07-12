@@ -31,7 +31,7 @@ body, html {
 
 .bg {
   /* The image used */
-  background-image: url("../assets/kon.jpg");
+  /* background-image: url("../assets/kon.jpg"); */
 
   /* Full height */
   height: 100vh; 

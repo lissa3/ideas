@@ -16,6 +16,7 @@ User = get_user_model()
 
 class IdeaSerializer(TaggitSerializer, ser.ModelSerializer):    
     categ_name = ser.ReadOnlyField(source='categ.name')
+    author_unid = ser.ReadOnlyField(source='author.unid')
     owner_idea = ser.CharField(source='author.username', default="", read_only=True)
     an_likes = ser.IntegerField(read_only=True)
     avg_rate = ser.DecimalField(read_only=True, max_digits=5, decimal_places=2, default='0.00')
@@ -32,5 +33,5 @@ class IdeaSerializer(TaggitSerializer, ser.ModelSerializer):
     class Meta:
         model = Idea
         fields = ('id', 'title', 'author', 'lead_text', 'main_text', 'slug',
-                  'owner_idea', 'categ_name', 'categ', 'created_at', 'status', 'thumbnail', 'an_likes', 'avg_rate', 'featured', 'tags')
+                  'owner_idea','author_unid','categ_name', 'categ', 'created_at', 'status', 'thumbnail', 'an_likes', 'avg_rate', 'featured', 'tags')
         

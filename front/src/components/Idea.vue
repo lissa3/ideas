@@ -28,7 +28,10 @@
                 </div>
                 <div class="col-lg-8 col-md-12 col-sm-12">
                 <div class="idea-title mb-1 mt-1">
-                        <h3>{{idea.title}}</h3>
+                    <h3>
+                       <router-link :to="{ name: 'ideaDetail',params:{slug:idea.slug} }"
+                       class="idea-link">{{idea.title}}</router-link>
+                    </h3>
                 </div> 
                 <div class="idea-title mb-2">
                     <p>by <strong>{{idea.owner_idea}}</strong></p>    
@@ -109,11 +112,11 @@ export default {
             next:state=>state.ideas.next           
         }),
         baseUrl() {
-         console.log("route.path is",this.$route.path)
+        //  console.log("route.path is",this.$route.path)
          return this.$route.path
         },
         currentPage() {
-            console.log("rout query page",this.$route.query.page)
+            // console.log("rout query page",this.$route.query.page)
             return Number(this.$route.query.page || '1')
         },
         limit(){
@@ -126,11 +129,11 @@ export default {
     },    
     watch: {
         currentPage() {
-            console.log("watcher here; see changes")
+            // console.log("watcher here; see changes")
             this.fetchIdeas()
         },
          baseUrl(){
-            console.log("watcher base url; see changes")
+            // console.log("watcher base url; see changes")
             this.fetchIdeas()
         }
     },     
@@ -139,7 +142,7 @@ export default {
     },
     methods:{
         fetchIdeas(){
-            console.log("looking for bible...")
+            // console.log("looking for bible...")
             const parsedUrl = parseUrl(this.apiUrl)
             // console.log("step 1 parsed url:",parsedUrl)
             // console.log("parsedUrl",parsedUrl)
@@ -153,7 +156,7 @@ export default {
             })
             const apiUrlWithParams = `${parsedUrl.url}?${stringifiedParams}`
             
-            console.log("calling store func for request")           
+            // console.log("calling store func for request")           
             //this.$store.dispatch(actionTypes.getIdeas, {apiUrl: this.apiUrl})       
             this.$store.dispatch(actionTypes.getIdeas, {apiUrl: apiUrlWithParams})       
             },
@@ -230,6 +233,18 @@ export default {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+.idea-link{
+    text-decoration:none;
+    cursor: pointer;
+    color:green
+
+}
+.idea-link:hover{
+    text-decoration:none;
+    cursor: pointer;
+    color:rgb(185, 221, 185)
+
 }
 
 </style>

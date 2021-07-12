@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// https://stackoverflow.com/questions/62462276 ow-to-solve-avoided-redundant-navigation-to-current-location-error-in-vue
+import Router from 'vue-router'
 
 import Activate from '@/views/auth/Activate'
 import ConfirmEmail from '@/views/auth/ConfirmEmail'
@@ -8,6 +10,8 @@ import GoogleForm from '@/views/auth/GoogleForm'
 import Home from "@/views/Home";
 import IdeaGeneral from '@/views/IdeaGeneral'
 import IdeaSearch from '@/views/IdeaSearch'
+import IdeaDetail from '@/views/IdeaDetail'
+import IdeaCreate from '@/views/IdeaCreate'
 import IdeaFilter from '@/views/IdeaFilter'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
@@ -20,6 +24,11 @@ import TagIdeas from '@/views/TagIdeas'
 import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
+// https://stackoverflow.com/questions/62462276 ow-to-solve-avoided-redundant-navigation-to-current-location-error-in-vue
+const routerPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+return routerPush.call(this, location).catch(error => error)
+};
 
 const routes = [
   {
@@ -84,12 +93,26 @@ const routes = [
     name: 'ideaGeneral',
     component: IdeaGeneral
   },
-  // {
-  //   // render all favorite ideas//????
-  //   path: '/idea',
-  //   name: 'idea',
-  //   component: IdeaGeneral
-  // },
+  {
+    path: '/idea-detail/:slug',
+    name: 'ideaDetail',
+    component: IdeaDetail
+  },
+  {   
+    path: '/idea-create',
+    name: 'ideaCreate',
+    component: IdeaCreate
+  },
+  {   
+    path: '/idea-edit',
+    name: 'editIdea', //TODO
+    component: IdeaCreate
+  },
+  {   
+    path: '/idea-delete',
+    name: 'deleteIdea',//TODO
+    component: IdeaCreate
+  },
   {
     // to render all ideas for a given tag
     path: '/tags/:slug',
@@ -117,12 +140,12 @@ const routes = [
   {
     path: '/settings',
     name: 'settings',
-    component: IdeaGeneral
+    component: IdeaGeneral //TODO
   },
   {
-    path: '/profiles?:slug',
+    path: '/profiles?:id',
     name: 'userProfile',
-    component: IdeaGeneral
+    component: IdeaGeneral//TODO
   },
   {
     path: '/profiles?:slug/favories',
@@ -143,6 +166,10 @@ const routes = [
     component: NotFound
   },
 ]
+/* 
+11.07.2021 : problem can't go back from not found page
+missing param for named route "notFound": Expected "0" to be defined  
+*/
 
 const router = new VueRouter({
   mode: 'history',

@@ -42,7 +42,7 @@ const actions = {
           if(resp.status === 200){                         
             commit(mutationTypes.GET_CATEGS_SUCCESS,resp.data)
             // commit(mutationTypes.GET_CATEGS_FAILURE,error=null)     
-            console.log("got categs from server OK")       
+            // console.log("got categs from server OK")       
             return resp.data      
             }
           }

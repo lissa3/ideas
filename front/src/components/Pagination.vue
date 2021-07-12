@@ -115,7 +115,7 @@ export default {
     pages() {
       const pagesCount = Math.ceil(this.total / this.limit)
       this.last = pagesCount
-      console.log("last is ",this.last)
+      // console.log("last is ",this.last)
       return range(1, pagesCount)
     },
     nextPage(){

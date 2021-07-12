@@ -1,0 +1,194 @@
+<template>
+<div class="container-fluid mt-3">
+  <section  v-if="idea" class="jumbotron text-center">
+        <div class="container banner">
+          <h1 class="jumbotron-heading">Title: {{idea.title}} </h1>
+          <div >
+              <div class="idea-date  text-center">
+                <span>{{idea.created_at| filterDateTime}}</span>
+              </div>              
+          </div>
+          <div class="banner-collection">
+            <div class="author-info d-flex align-items-center justify-content-around">              
+              <b-avatar></b-avatar>
+              <router-link :to="{name:'userProfile',params:{id:idea.author}}" class="px-2">
+                {{idea.owner_idea}}
+              </router-link>
+            </div>
+            <template v-if="!authorIsCurrentUser">
+            <div class="follow-block">Follow</div>
+            <!-- <div class="favorite-block d-flex justify-content-between align-items-center"> -->
+            <div class="favorite-block d-flex">
+              <p>Favorite</p>
+              <div class="col-lg-1 col-md-1 col-sm-1">
+                <b-icon icon="heart-fill"></b-icon>
+              </div>
+            </div>
+            </template> 
+            <template v-if="authorIsCurrentUser">
+              <div class="edit-block">
+              <router-link class="btn btn-outline-secondary btn-sm" :to="{name:'editIdea'}">
+                <b-icon-pencil></b-icon-pencil>Edit Idea 
+              </router-link>
+            </div>
+           
+            <div class="delete-block">
+              <router-link class="btn btn-outline-secondary btn-sm" :to="{name:'deleteIdea'}">
+                <b-icon-trash></b-icon-trash>Delete Idea 
+              </router-link>            
+            </div>     
+            </template>    
+         
+          </div>  
+          
+        </div>
+    </section>    
+    <section >
+        <div v-if="isLoading"><app-loader></app-loader></div>  
+        <div v-if="error" :message="error"><app-error-msg></app-error-msg>Ms</div>  
+    </section>
+    <!-- body Idea -->
+      <div v-if="idea" class="album py-5 ">
+        <div class="container">
+          <div class="row idea-container">
+            <div class="col-xs-12">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top"  style="height: 225px; width: 100%; display: block;" src="../assets/logo.png" data-holder-rendered="true">
+                <div class="card-body">                   
+                </div>               
+                <div class="card-text px-3">
+                    <div class="mb-2">
+                      <p>{{idea.lead_text}}</p>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur architecto eum atque odio deserunt! Eaque velit possimus, repellat quis adipisci at accusamus dolores ex sequi corrupti fugiat delectus asperiores non.</p>
+                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint suscipit laboriosam unde, vel nemo blanditiis voluptates? Perferendis similique qui labore porro aliquid, nobis quidem odio, quos neque aperiam placeat consectetur.</p>
+                    </div>
+                    <div class="idea-read-more mb-2">
+                    <div >List of tags
+                      <div v-if="idea.tags">
+                      <div class="d-flex justify-content-left">
+                        <div class="px-1">Tags:</div>
+                      <div v-for="tag in idea.tags" :key="tag.id">
+                        <h6 class="px-1 tick-tag"><b-badge variant="success">{{tag}}</b-badge></h6>
+                        <!-- <h6 class="px-1 tick-tag" @click="callTagIdeas(tag)"><b-badge variant="success">{{tag}}</b-badge></h6> -->
+                      </div>
+                      </div>              
+                    </div> 
+                    </div>                    
+                </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center px-3 mb-3">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                    <small class="text-muted">9 mins</small>
+                  </div>
+                </div>
+              </div>
+            </div>            
+        </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import AppLoader from '@/components/Loader'
+import AppErrorMsg from '@/components/ErrorMsg'
+import {mapState} from 'vuex'
+import {actionTypes} from '@/store/modules/singleIdea'
+import {mapGetters} from 'vuex'
+import {getterTypes} from '@/store/modules/auth'
+
+export default {
+  name: 'AppIdeaDetail',
+  components:{
+    AppLoader,
+    AppErrorMsg
+  },
+  data(){
+    return{
+      // ideaObj:null
+    }
+  },
+  computed:{            
+        ...mapState({            
+            isLoading:state=>state.idea.isLoading,
+            idea:state=>state.idea.data,
+            error:state=>state.idea.error
+        }),
+        ...mapGetters({
+          currentUser:getterTypes.currentUser
+        }),
+        authorIsCurrentUser(){
+          if(this.currentUser){
+            return this.currentUser.id === this.idea.author
+          }else{
+            // user is anonymus(this.currentUser === null)
+            return false
+          }
+        }
+        
+  },
+  created(){
+    this.getOneIdea()
+  },
+  methods:{
+    getOneIdea(){
+      console.log("component created")      
+      this.$store.dispatch(actionTypes.getIdea,{slug:this.$route.params.slug})
+      .then((resp)=>{
+        // console.log("component calling; resp",resp)
+        // console.log("with keys",Object.keys(resp))
+        if(resp.status ===200){
+          console.log("OK 200")
+          // this.ideaObj = resp.data
+        }else if(resp.status ===404){
+          console.log("404 not found")
+          this.$router.push({name:'notFound'})
+        }
+      })
+      
+    }
+  },
+  filters: {
+    // Filter full date with (local+) time
+    // 2020-07-23 20:41:43.833825
+    filterDateTime(item) {
+      let initialDate = new Date(item);
+      return `
+          ${initialDate.getDate()}.${
+        initialDate.getMonth() + 1
+      }.${initialDate.getFullYear()}-${initialDate.getHours()}:${initialDate.getMinutes()} UTC ${initialDate.getUTCHours()}:${initialDate.getMinutes()}`;
+    },
+    }    
+}
+</script>
+<style scoped>
+.banner{
+  height: 300px;
+  max-height: 350px;
+  background-color: burlywood;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.idea-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.banner-collection{
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+
+}
+.tick-tag{
+  /* pointer for a tag */
+  cursor: pointer;
+}
+/* .idea-main-text {
+  padding
+} */
+</style>

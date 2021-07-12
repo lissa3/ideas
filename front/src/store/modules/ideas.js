@@ -21,29 +21,24 @@ export const mutationTypes = {
     SEARCH_IDEAS_FAILURE:'[ideas] search ideas failure',
     SET_COUNT:'[ideas] Set ideas count',
     SET_PREV:'[ideas] Set ideas prev',
-    SET_NEXT:'[ideas] Set ideas next',  
-     
+    SET_NEXT:'[ideas] Set ideas next',       
        
 
 }
-
 export const actionTypes = {
     getIdeas:'[ideas] Get ideas',
     searchIt:'[ideas] Make search in ideas'
 }
 
-const getters = {
-    
-} 
 const actions = {
     async [actionTypes.getIdeas]({commit},{apiUrl}){
         // console.log("store dispatching getIdeas")
-        console.log("api url in store is",apiUrl)
+        // console.log("api url in store is",apiUrl)
         commit(mutationTypes.SET_IDEAS_LOADING);
         try{
             // instead of apiUrl(str)=> {object, к можно деструктурировать}
            const resp = await ideaAPI.getIdeas(apiUrl)            
-            console.log("response getIdeas is",resp.data)
+            // console.log("response getIdeas is",resp.data)
             commit(mutationTypes.GET_IDEAS_SUCCESS,resp.data.results)
             commit(mutationTypes.SET_NEXT,resp.data.next)
             commit(mutationTypes.SET_PREV,resp.data.previous)
@@ -51,7 +46,7 @@ const actions = {
             return resp            
 
         } catch(err){
-            console.log("error by getIdea request",err)
+            // console.log("error by getIdea request",err)
             commit(mutationTypes.GET_IDEAS_FAILURE)
         }          
     },
@@ -89,8 +84,7 @@ const mutations = {
 
 
 export default {
-    state,
-    getters,
+    state,    
     mutations,
     actions
     

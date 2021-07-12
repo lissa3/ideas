@@ -1,10 +1,24 @@
 <template>
   <div class="about">
-    <h1>This is an error msg block</h1>
+    <p>Temp msg:This is an error msg block</p>
+    <p v-if="errorSingleIdea">Sorry, PAGE NOT FOUND</p>
   </div>
 </template>
+
 <script>
+import {mapState} from 'vuex'
 export default {
-  name:'AppErrorMsg'
+  name:'AppErrorMsg',
+  props:{
+        message:{
+            type:String,
+            required:false
+        }
+    },
+  computed:{            
+        ...mapState({            
+            errorSingleIdea:state=>state.idea.error
+        })
+  },
 }
 </script>

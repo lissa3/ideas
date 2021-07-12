@@ -18,7 +18,8 @@ GET localhost:8000/api/v1/categories-create-idea/  (without tree structure: for 
 GET localhost:8000/api/v1/cats/slug/                (ideas for a given category)
 
 C Ideas (via drf router) ipv id ||=> slug
-GET localhost:8000/api/v1/idea-collection/ideas/(slug)
+
+GET /api/v1/ideas-collection/ideas/(slug=first-post-ysMr)/
 
 D Profile
 GET  localhost:8000/api/v1/profile-info/            headers: Authorization: JWT token

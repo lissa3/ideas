@@ -28,7 +28,6 @@
 
       <b-nav-item href="#"><router-link :to="{ name: 'ideaGeneral' }" class="link-decor" active-class="active"
               >Ideas</router-link></b-nav-item>
-
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -38,15 +37,18 @@
           <b-button @click="doSearch" size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>       
       <template v-if="isLoggedIn">
-        <b-nav-item href="#">Link</b-nav-item>
-              <b-nav-item href="#">IsLoggedIn</b-nav-item>              
-              <b-nav-item href="#" >
-                <a href="#" @click="doSignOut" class="link-decor" >Sign Out</a>
-              </b-nav-item> 
-              <b-nav-item href="#" >
-                <b-icon icon="person-fill"></b-icon>
-                <a href="#" class="link-decor" >Welcome, &nbsp;{{currentUser.username}}</a>
-              </b-nav-item>
+          <b-nav-item href="#" >
+            <router-link :to="{ name: 'ideaCreate' }" class="link-decor" active-class="active"
+              >New Idea</router-link>
+          </b-nav-item>
+          <b-nav-item href="#">IsLoggedIn</b-nav-item>              
+          <b-nav-item href="#" >
+            <a href="#" @click="doSignOut" class="link-decor" >Sign Out</a>
+          </b-nav-item> 
+          <b-nav-item href="#" >
+            <b-icon icon="person-fill"></b-icon>
+            <a href="#" class="link-decor" >Welcome, &nbsp;{{currentUser.username}}</a>
+          </b-nav-item>
           <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
@@ -125,7 +127,7 @@ export default {
   text-decoration:none;
 }
 .link-decor:hover{
-  color:black;
+  color:rgb(221, 216, 216);
 }
 .active{
   background-color: rgb(245, 239, 239);

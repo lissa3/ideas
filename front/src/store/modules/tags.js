@@ -39,14 +39,14 @@ const actions = {
           const resp= await fetchTags.getTags()
         //   console.log("got tags",resp.data)
           if(resp.status === 200){ 
-            console.log("got tags is OK")                        
+            // console.log("got tags is OK")                        
             commit(mutationTypes.GET_TAGS_SUCCESS,resp.data) 
             // commit(mutationTypes.GET_TAGS_FAILURE,err=null)           
             return resp.data      
             }
           }
           catch(err){
-              console.log("can't fetch tags",err)
+              // console.log("can't fetch tags",err)
             commit(mutationTypes.GET_TAGS_FAILURE,err)
             
           }

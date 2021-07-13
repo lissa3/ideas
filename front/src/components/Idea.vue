@@ -1,7 +1,7 @@
 <template>
     <div class="container">        
         <div v-if="isLoading"><app-loader></app-loader></div>
-        <div  v-if="ideas" class="wrapper">            
+        <div  v-if="ideasToDisplay" class="wrapper">            
             <div class="row main-row" v-for="idea in ideas" :key="idea.id">
                 <div   class="col-lg-4 col-md-12 col-sm-12">
                     <div class="idea-img mb-2">
@@ -58,28 +58,38 @@
                     <p>{{idea.lead_text}}</p>
                 </div>
                 <div class="idea-read-more mb-2">
-                    <button class="btn btn-outline-dark">Read More</button>
+                    <button class="btn btn-outline-dark">
+                        <router-link :to="{ name: 'ideaDetail',params:{slug:idea.slug} }"
+                       class="idea-link">Read More</router-link>
+                    </button>
                 </div>
                 <div class="idea-read-more mb-2">
-                    <div >List of tags</div>
-                    
+                   <div v-if="idea.tags">                      
+                        <div class="d-flex justify-content-left">
+                          <div class="px-1">Tags:</div>
+                          <app-tags-list :tags="idea.tags"></app-tags-list>                                  
+                        </div> 
+                      </div>                        
                 </div>
               </div>
             </div>
+        </div>        
+        <div v-if="!ideasToDisplay">{{notFoundMsg}}</div>        
+        <div v-if="ideasToDisplay">
+            <div >
+                <div class="col-lg-8 col-md-12 col-sm-12 pagination">
+                    <app-pagination  
+                    :currentPage="currentPage" 
+                    :total="total"
+                    :limit="limit"
+                    :url="baseUrl"
+                    :next="next"
+                    :prev="prev">
+                    </app-pagination>           
+                </div>
+            </div>
         </div>
-        <div v-else>No ideas yet</div>
-        <div v-if="error">smth went wrong</div>
-        <div class="col-lg-8 col-md-12 col-sm-12 pagination">
-            <app-pagination  
-            :currentPage="currentPage" 
-            :total="total"
-            :limit="limit"
-            :url="baseUrl"
-            :next="next"
-            :prev="prev">
-            </app-pagination>           
-        </div>
-    </div>
+    </div>    
 </template>
 <script>
 
@@ -90,11 +100,19 @@ import {limit} from '@/helpers/vars'
 import {mapState} from 'vuex'
 import  AppPagination from '@/components/Pagination'
 import AppLoader from '@/components/Loader'
+import AppTagsList from '@/components/TagsList'
+
 export default {
     name:'AppIdea',
+    data(){
+        return{
+            notFoundMsg:"Sorry. Nothing found at this moment"
+        }
+    },
     components:{
          AppPagination,
-         AppLoader
+         AppLoader,
+         AppTagsList
     },
     props:{
         apiUrl:{
@@ -124,7 +142,11 @@ export default {
         },
         offset() {
          return this.currentPage * limit - limit
-        },      
+        }, 
+        ideasToDisplay(){
+            return this.total>0
+                
+        }     
                   
     },    
     watch: {

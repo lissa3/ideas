@@ -16,11 +16,12 @@ import IdeaFilter from '@/views/IdeaFilter'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
 import SignUp from "@/views/auth/SignUp";
-import PswForgotStart from "@/views/auth/PswForgotStart";
+import PswForgotStart from "@/views/auth/PswForgotStart"
 import SetPswReset from '@/views/auth/PswReset'
 import SetPswChange from '@/views/auth/ChangePsw'
-import PswForgotFailure from "@/views/auth/MsgPswResetFailure";
-import TagIdeas from '@/views/TagIdeas'
+import PswForgotFailure from "@/views/auth/MsgPswResetFailure"
+import IdeasByTagSlug from '@/views/IdeasByTagSlug'
+import IdeasByTagName from '@/views/IdeasByTagName'
 import NotFound from '@/views/NotFound'
 
 Vue.use(VueRouter)
@@ -114,10 +115,16 @@ const routes = [
     component: IdeaCreate
   },
   {
-    // to render all ideas for a given tag
-    path: '/tags/:slug',
-    name: 'tag',
-    component: TagIdeas
+    // to render all ideas for a given tag slug (unique)
+    path: '/tags-slug/:slug',
+    name: 'ideasBySlug',
+    component: IdeasByTagSlug
+  },
+  {
+    // to render all ideas for a given tag name (unique)
+    path: '/tags-name/:name',
+    name: 'ideasByName',
+    component: IdeasByTagName
   },
   {
     // to render all ideas for a given category

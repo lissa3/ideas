@@ -77,7 +77,7 @@ export default {
     },
     methods:{
         sortIt(){          
-            console.log("param to url for ordering:",this.passUserChoice)
+            // console.log("param to url for ordering:",this.passUserChoice)
             this.$router.push({name:'filter',params:{sort:this.passUserChoice,featured:this.showFeatured}}) 
         },
         reset(){

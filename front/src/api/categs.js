@@ -1,7 +1,8 @@
-import axios from '@/api/axios'
+import simpleAPI from '@/api/plainAxios'
   
 const getCategTree = ()=>{    
-    return axios.get(`/api/v1/categories/`)
+    // console.log("cat with simpleAPI")
+    return simpleAPI.get(`/api/v1/categories/`)
 }
 export default {    
     getCategTree

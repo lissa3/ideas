@@ -20,10 +20,15 @@ export const mutationTypes = {
     SET_IDEA_LOADING:'[single idea] Load idea start',
     GET_IDEA_SUCCESS:'[single idea] Get idea success',
     GET_IDEA_FAILURE:'[singel idea] Get idea failure',
+
+    DELETE_IDEA_LOADING:'[single idea] DELETE idea start',
+    DELETE_IDEA_SUCCESS:'[single idea] DELETE idea success',
+    DELETE_IDEA_FAILURE:'[singel idea] DELETE idea failure',
 }
 
 export const actionTypes = {
     getIdea:'[oneIdea] Get one idea',
+    deleteIdea:'[oneIdea] Delete idea',
     
 }
 const mutations = {
@@ -41,7 +46,14 @@ const mutations = {
         state.isLoading = false
         state.error=error
     },
-
+    // at this point they do (almost) nothing but draft for feauture
+    [mutationTypes.DELETE_IDEA_LOADING](){},   
+    [mutationTypes.DELETE_IDEA_SUCCESS](state){        
+        state.data = null
+    }, 
+    [mutationTypes.DELETE_IDEA_FAILURE](state,err){
+        state.error = err
+    }    
 }
 const actions = {
     async [actionTypes.getIdea]({commit},{slug}){
@@ -52,12 +64,29 @@ const actions = {
            const resp = await ideaAPI.getOneIdea(slug)  
             console.log("response getIdeas is",resp)
             commit(mutationTypes.GET_IDEA_SUCCESS,resp.data)                        
-            return resp            
+            return resp           
 
         } catch(err){
             console.log("error by getOneIdea request",err)
             // example: incorrect url in request ot dj server
-            commit(mutationTypes.GET_IDEA_FAILURE,err)
+            commit(mutationTypes.GET_IDEA_FAILURE,err)            
+            
+        }          
+    },
+    async [actionTypes.deleteIdea]({commit},{slug}){
+        console.log("store dispatching deleteIdeas with slug",slug)
+        commit(mutationTypes.SET_IDEA_LOADING);
+        try{
+           // let op: you can get resp.data already ( see api) if you want            
+           const resp = await ideaAPI.deleteIdea(slug)  
+            console.log("response from delete:",resp)
+            commit(mutationTypes.DELETE_IDEA_SUCCESS)                        
+            return resp            
+
+        } catch(err){
+            console.log("error by deleteIdea request",err)
+            // example: incorrect url in request ot dj server
+            commit(mutationTypes.DELETE_IDEA_FAILURE,err)
             
             
         }          

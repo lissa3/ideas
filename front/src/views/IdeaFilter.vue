@@ -32,11 +32,11 @@ export default {
     },
     computed:{
       sortBy() {
-        console.log("params are",this.$route.params.sort)
+        // console.log("params are",this.$route.params.sort)
         return this.$route.params.sort
     },
       filterBy() {
-        console.log("params are",this.$route.params.featured)
+        // console.log("params are",this.$route.params.featured)
         return this.$route.params.featured
     },
     apiUrl(){           

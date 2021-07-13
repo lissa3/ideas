@@ -31,11 +31,12 @@ export default {
       
   },
   computed: {
-    tagName() {
+    tagSlug() {
+      console.log("do you see slug (ideaByTagSlu)",this.$route.params.slug)
       return this.$route.params.slug
     },
     apiUrl() {
-      return `/api/v1/tags/${this.tagName}/`
+      return `/api/v1/tags/${this.tagSlug}/`
     }
   },
   

@@ -1,13 +1,15 @@
 import fetchTags from '@/api/tags'
 
 export const actionTypes = {
-    getTags:'[tags] Get tags'
+    getTags:'[tags] Get tags',
+    // ideasByTagName:'[tags] Get by tag name'
 }
 
 export const mutationTypes = {
     LOADING_TAGS:'[tags] Load tags',
     GET_TAGS_SUCCESS:'[tags] Set list tags',
     GET_TAGS_FAILURE:'[tags] Fail list tags',
+    
 }
 const state ={
     isLoading:false,

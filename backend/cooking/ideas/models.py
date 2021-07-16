@@ -100,7 +100,7 @@ class Idea(TimeStamp):
     categ = TreeForeignKey(Category,
                            related_name='ideas',
                            on_delete=models.PROTECT,
-                           blank=True)
+                           )
     title = models.CharField(max_length=240)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
     lead_text = models.CharField(max_length=254,default="")

@@ -14,6 +14,7 @@
                   <b-form-input
                     id="input-1"
                     v-model.trim="email"
+                    autocomplete="on"
                     type="email"
                     placeholder="Enter email"
                     :class="{ 'is-invalid warning': this.$v.email.$error }"
@@ -45,6 +46,7 @@
                     @blur="$v.psw.$touch()"
                     :class="{ 'is-invalid warning': this.$v.psw.$error }"                      
                     v-model.trim="psw"
+                     autocomplete="off"
                     placeholder="Enter password"          
                   ></b-form-input>
                 </div>

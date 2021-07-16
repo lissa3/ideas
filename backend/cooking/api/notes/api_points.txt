@@ -16,13 +16,25 @@ GET localhost:8000/auth/users/me/ (in headers: 'JWT ey...gghghgh')
 B Categories
 ====================================================================================================
 GET localhost:8000/api/v1/categories/              (with tree structure: for left-side menu) 
+
 GET localhost:8000/api/v1/categories-create-idea/  (without tree structure: for dropdown idea create form)
+example of dj serv resp:[{"name": "Keuken","id": 2},{"name": "School","id": 3}]
+
 GET localhost:8000/api/v1/cats/slug/                (ideas for a given category)
 
 C Ideas (via drf router) ipv id ||=> slug
 =====================================================================================================
 GET /api/v1/ideas-collection/ideas/(slug=first-post-ysMr)/
 DELETE /api/v1/ideas-collection/ideas/slug/
+
+POST /api/v1/ideas-collection/ideas/idea/  (Content-Type: multipart/form-data )=> resp.status = 201
+when idea created: 
+= tags are not required,default = "" will be send to dj server;
+= otherwise: send tag's string (len <50 chars)
+= dj server sends back obj new idea with tags as an array of tags separated by comma
+front: checks for input tags string length(vuelidate), lowecase and trim
+back: clears tags further from possible: ,.:;'*)/(!") 
+error tag from backend: err.response.data.detail (len > limit 50 chars)
 
 =======================================================================================================
 
@@ -33,9 +45,9 @@ PATCH localhost:8000/api/v1/profile-change/unid/
 E Tags
 ======================================================================================================
 GET localhost:8000/api/v1/tags/'
-GET localhost:8000/api/v1/tags/slug/                (list ideas for a given tag slug)
+GET localhost:8000/api/v1/tags/slug/                 (list ideas for a given tag slug)
 
-GET localhost:8000/api/v1/tags/name/                (list ideas for a given tag name)  
+GET localhost:8000/api/v1/tags-name/name/            (list ideas for a given tag name)  
     
 G Search
 Search ideas search_fields = ['title', 'lead_text', 'main_text']

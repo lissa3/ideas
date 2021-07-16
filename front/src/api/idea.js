@@ -12,10 +12,15 @@ const getOneIdea = (slug)=>{
 const deleteIdea = (slug)=>{
     return axios.delete(`/api/v1/ideas-collection/ideas/${slug}/`)
 }
+
+const createIdea = (ideaInput)=>{
+    return axios.post(`/api/v1/ideas-collection/ideas/`,ideaInput)
+}
 export default {    
     getIdeas,
     getOneIdea,
-    deleteIdea
+    deleteIdea,
+    createIdea
     
 
 }    

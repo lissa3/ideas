@@ -37,7 +37,7 @@
             </template> 
             <template v-if="authorIsCurrentUser">
               <div class="edit-block">
-                <router-link class="btn btn-outline-secondary btn-sm" :to="{name:'editIdea'}">
+                <router-link class="btn btn-outline-secondary btn-sm" :to="{name:'editIdea',params:{slug:idea.slug}}">
                   <b-icon-pencil></b-icon-pencil>Edit Idea 
                 </router-link>
               </div>           
@@ -62,7 +62,17 @@
           <div class="row idea-container">
             <div class="col-xs-12">
               <div class="card mb-4 box-shadow">
-                <img class="card-img-top"  style="height: 225px; width: 100%; display: block;" src="../assets/logo.png" data-holder-rendered="true">
+                <div   class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="idea-img mb-2">
+                        <div v-if="idea.thumbnail">
+                            <img  :src="idea.thumbnail" alt="img idea">                            
+                        </div>
+                        <div v-else>
+                          <img class="card-img-top"  style="height: 225px; width: 100%; display: block;" src="../assets/logo.png" data-holder-rendered="true">                        
+                        </div>
+                    </div>
+                </div>  
+                
                 <div class="d-flex justify-content-around">
                    <div class="box d-flex ">              
                     <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 

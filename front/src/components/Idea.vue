@@ -5,7 +5,13 @@
             <div class="row main-row" v-for="idea in ideas" :key="idea.id">
                 <div   class="col-lg-4 col-md-12 col-sm-12">
                     <div class="idea-img mb-2">
-                        <img src="@/assets/logo.png" alt="img" class="img-fluid">
+                        <div v-if="idea.thumbnail">
+                            
+                            <img  :src="idea.thumbnail" alt="img idea" class="img-fluid">
+                        </div>
+                        <div v-else>
+                            <img src="@/assets/logo.png" alt="img" class="img-fluid">
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 mb-2">

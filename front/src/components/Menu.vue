@@ -29,6 +29,10 @@
       <b-nav-item href="#"><router-link :to="{ name: 'ideaGeneral' }" class="link-decor" active-class="active"
               >Ideas</router-link></b-nav-item>
       </b-navbar-nav>
+      <b-nav-item href="#" >
+            <router-link :to="{ name: 'ideaCreate' }" class="link-decor" active-class="active"
+              >New Idea</router-link>
+          </b-nav-item>
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
@@ -37,10 +41,7 @@
           <b-button @click="doSearch" size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>       
       <template v-if="isLoggedIn">
-          <b-nav-item href="#" >
-            <router-link :to="{ name: 'ideaCreate' }" class="link-decor" active-class="active"
-              >New Idea</router-link>
-          </b-nav-item>
+          
           <b-nav-item href="#">IsLoggedIn</b-nav-item>              
           <b-nav-item href="#" >
             <a href="#" @click="doSignOut" class="link-decor" >Sign Out</a>

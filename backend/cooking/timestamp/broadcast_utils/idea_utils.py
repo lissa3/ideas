@@ -9,7 +9,7 @@ def checkTagStringLength(tag_string):
 
 
 def get_json_tags(tag_string):
-    """ take a tag string with one or more separated by comma's  tagsб
+    """ take a tag string with one or more separated by comma's  tags,
     get rid of "" items (line 28) and convert it to a list in json format
     """
     # print("util func get_json_tags for a tag stirng to work with", tag_string, "len", len(tag_string))

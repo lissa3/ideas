@@ -19,16 +19,18 @@ const state = {
 export const mutationTypes = {
     SET_IDEA_LOADING:'[single idea] Load idea start',
     GET_IDEA_SUCCESS:'[single idea] Get idea success',
-    GET_IDEA_FAILURE:'[singel idea] Get idea failure',
+    GET_IDEA_FAILURE:'[single idea] Get idea failure',
 
     DELETE_IDEA_LOADING:'[single idea] DELETE idea start',
     DELETE_IDEA_SUCCESS:'[single idea] DELETE idea success',
-    DELETE_IDEA_FAILURE:'[singel idea] DELETE idea failure',
+    DELETE_IDEA_FAILURE:'[single idea] DELETE idea failure',
+   
 }
 
 export const actionTypes = {
-    getIdea:'[oneIdea] Get one idea',
-    deleteIdea:'[oneIdea] Delete idea',
+    getIdea:'[single idea] Get one idea',
+    deleteIdea:'[single idea] Delete idea',
+    
     
 }
 const mutations = {
@@ -53,7 +55,8 @@ const mutations = {
     }, 
     [mutationTypes.DELETE_IDEA_FAILURE](state,err){
         state.error = err
-    }    
+    },    
+    
 }
 const actions = {
     async [actionTypes.getIdea]({commit},{slug}){
@@ -81,17 +84,14 @@ const actions = {
            const resp = await ideaAPI.deleteIdea(slug)  
             console.log("response from delete:",resp)
             commit(mutationTypes.DELETE_IDEA_SUCCESS)                        
-            return resp            
-
+            return resp           
         } catch(err){
             console.log("error by deleteIdea request",err)
             // example: incorrect url in request ot dj server
-            commit(mutationTypes.DELETE_IDEA_FAILURE,err)
-            
-            
+            commit(mutationTypes.DELETE_IDEA_FAILURE,err)        
         }          
     },
-
+    
 }
 
 

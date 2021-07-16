@@ -105,15 +105,11 @@ const routes = [
     component: IdeaCreate
   },
   {   
-    path: '/idea-edit',
+    path: '/idea-edit:slug',
     name: 'editIdea', //TODO
     component: IdeaCreate
   },
-  {   
-    path: '/idea-delete',
-    name: 'deleteIdea',//TODO
-    component: IdeaCreate
-  },
+  
   {
     // to render all ideas for a given tag slug (unique)
     path: '/tags-slug/:slug',

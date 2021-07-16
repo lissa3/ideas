@@ -1,13 +1,16 @@
 import getCateg from '@/api/categs'
 
+
 export const actionTypes = {
-    getCategs:'[categs] Get categ tree'
+    getCategs:'[categs] Get categ tree',
+   
 }
 
 export const mutationTypes = {
     LOADING_CATEGS:'[cats] Load categories',
     GET_CATEGS_SUCCESS:'[cats] Set list categs',
     GET_CATEGS_FAILURE:'[cats] Fail get categs',
+    
 }
 const state ={
     isLoading:false,

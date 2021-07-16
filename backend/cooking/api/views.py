@@ -26,6 +26,7 @@ class CatListIdeaForm(generics.ListAPIView):
     """ get all categories for idea creation form without tree structure"""
     serializer_class = CategoryNameSerializer
     permission_classes = (AllowAny,)
+    pagination_class=None
 
     def get_queryset(self, queryset=None):
         queryset = Category.objects.all()
@@ -79,7 +80,7 @@ class TagList(generics.ListAPIView):
 
 
 class TagIdeasListSlug(generics.ListAPIView):
-    """ get list of ideas based on tags(slug)"""
+    """ get list of ideas based on a tag's slug"""
     serializer_class = IdeaSerializer
     permission_classes = (AllowAny,)
     # pagination_class = CustomPaginationIdeas

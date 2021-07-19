@@ -7,16 +7,26 @@
               <div class="idea-date  text-center">
                 <span>{{idea.created_at| filterDateTime}}</span>
               </div>
-              <div>
-                 <div class="box d-flex ">
-              
-              <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
-              <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
-              <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
-              <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
-              <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
-            </div> 
-              </div>              
+               <!-- <div class="d-flex justify-content-around offset-md-2"> -->
+               <!-- <div class="d-flex justify-content-around">
+                <div>
+                    <p><span>Rating: </span><b-icon-star-fill></b-icon-star-fill>
+                      <span class="px-1"><strong>5</strong></span>
+                    </p>
+                </div>             
+                <div>
+                  <span><b-icon-heart-fill></b-icon-heart-fill><span class="px-1">{{idea.an_likes}}</span></span>
+                 </div> 
+              </div> -->
+              <!-- <div>
+                 <div class="box d-flex ">              
+                  <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
+                  <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
+                  <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
+                  <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
+                  <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
+                </div> 
+              </div>               -->
           </div>
           <div class="banner-collection">
             <div class="author-info d-flex align-items-center justify-content-around">              
@@ -29,9 +39,9 @@
               <div class="follow-block">Follow</div>
               <!-- <div class="favorite-block d-flex justify-content-between align-items-center"> -->
               <div class="favorite-block d-flex">
-                <p>Favorite</p>
+                <p>Add to Favorite</p>
                 <div class="col-lg-1 col-md-1 col-sm-1">
-                  <b-icon icon="heart-fill"></b-icon>
+                  <b-icon icon="flower1"></b-icon>
                 </div>
               </div>
             </template> 
@@ -48,15 +58,14 @@
               </div>     
             </template>    
          
-          </div>  
-          
+          </div>          
         </div>
     </section>    
     <section >
         <div v-if="isLoading"><app-loader></app-loader></div>  
         <div v-if="error" :message="error"><app-error-msg></app-error-msg>Ms</div>  
     </section>
-    <!-- body Idea -->
+<!-- body Idea -->
       <div v-if="idea" class="album py-5 ">
         <div class="container">
           <div class="row idea-container">
@@ -72,22 +81,30 @@
                         </div>
                     </div>
                 </div>  
-                
-                <div class="d-flex justify-content-around">
-                   <div class="box d-flex ">              
-                    <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
-                    <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
-                    <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
-                    <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
-                    <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
+                <div class="d-flex justify-content-end mt-3 px-3 ">
+                  <div class="d-flex justify-content-between flex-sm-row-reverse">
+                    <div class="px-1"><span>Rating: </span><b-icon-star-fill></b-icon-star-fill>
+                      <span class="px-1"><strong>5&nbsp;&nbsp;</strong></span>
+                    </div>
+                    <div class="box d-flex px-1">              
+                      <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
+                      <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
+                      <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
+                      <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
+                      <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
+                    </div>
                   </div>
-                  <div>Likes</div> 
+                  <!-- <div class="click-like"  @click="doLike">
+                    <span>Like &nbsp; <b-icon-heart-fill></b-icon-heart-fill><span class="px-1"></span></span>
+                    <span class="px-1">{{idea.an_likes}}</span>
+                  </div> -->
+                  
                 </div>
                 <div class="card-body">                   
                 </div>               
                 <div class="card-text px-3">
                     <div class="mb-2">
-                      <p>{{idea.lead_text}}</p>
+                      <p class="text-center">{{idea.lead_text}}</p>
                       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur architecto eum atque odio deserunt! Eaque velit possimus, repellat quis adipisci at accusamus dolores ex sequi corrupti fugiat delectus asperiores non.</p>
                       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint suscipit laboriosam unde, vel nemo blanditiis voluptates? Perferendis similique qui labore porro aliquid, nobis quidem odio, quos neque aperiam placeat consectetur.</p>
                     </div>
@@ -101,10 +118,15 @@
                     </div>
                   </div>
                   <div class="d-flex justify-content-between align-items-center px-3 mb-3">
-                    <div class="btn-group">
+                    <!-- <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                       <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
+                    </div> -->
+                      <app-like 
+                        :id="idea.id" 
+                        :idea-likes="showLike"                                                
+                        @likeChange="handleLikeChange">
+                      </app-like>
                     <small class="text-muted">9 mins</small>
                   </div>
                 </div>
@@ -134,6 +156,7 @@
 import AppLoader from '@/components/Loader'
 import AppErrorMsg from '@/components/ErrorMsg'
 import AppDeleteIdeaConfirmation from '@/components/Modal.vue'
+import AppLike from '@/components/Like'
 import AppTagsList from '@/components/TagsList'
 import {mapState,mapGetters} from 'vuex'
 import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
@@ -145,12 +168,14 @@ export default {
     AppLoader,
     AppErrorMsg,
     AppDeleteIdeaConfirmation,
-    AppTagsList
+    AppTagsList,
+    AppLike
   },
   data(){
     return{
       makeModalVisible: false,
-      // ideaObj:null
+      // likeToToggle:false, 
+      ideaLikes:0 
     }
   },
   computed:{            
@@ -167,10 +192,11 @@ export default {
           if(!this.currentUser||!this.idea.author){
             return false}
           console.log("calc if current user is the author")  
-          return this.currentUser.id === this.idea.author
-          
-        }
-        
+          return this.currentUser.id === this.idea.author          
+        },
+        showLike(){
+          return this.ideaLikes
+        }       
         
   },
   created(){
@@ -195,6 +221,52 @@ export default {
     doStar(val){
       console.log(val)
     },
+    handleLikeChange(likeInfo){
+      console.log("parent sees",likeInfo)
+      this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
+      .then((resp)=>{
+        if(resp.status===200){
+          this.likeState = resp.data.like
+          // update like on front
+          if(this.likeState ===true){
+            this.idea.an_likes +=1
+          }else{
+            this.idea.an_likes -=1
+          } 
+          this.ideaLikes = this.idea.an_likes
+          // console.log("setting a new state for like",likeState)     
+              
+    
+
+        }
+      })
+    },
+    // async doLike(){
+    //   console.log("like now is",this.likeToToggle)
+    //   this.likeToToggle = !this.likeToToggle;
+    //   const likeInfo = {
+    //             like:{"like":this.likeToToggle},
+    //             id:this.idea.id
+    //   };      
+     
+    //   this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
+    //   .then((resp)=>{
+    //     if(resp.status===200){
+    //       const likeState = resp.data.like
+    //       // update like on front
+    //       if(likeState ===true){
+    //         this.idea.an_likes +=1
+    //       }else{
+    //         this.idea.an_likes -=1
+    //       } 
+    //       // console.log("setting a new state for like",likeState)     
+    //       this.likeToToggle = likeState;    
+    
+
+    //     }
+    //   })
+      
+    // },
     showModal(){
       console.log("user wants to delte his idea")
       this.makeModalVisible = true;
@@ -243,9 +315,15 @@ export default {
 }
 .banner-collection{
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-content: center;
 
+}
+/* likes */
+.click-like{
+  cursor: pointer;
+  padding:6px;
 }
 
 /* box with stars */

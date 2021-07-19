@@ -6,10 +6,11 @@ const state = {
     isSubmitting:false,
     servErrs:{
         status:null,
+        categErr:null,
+        featuredErr:null,
         titleErr:null,
         leadTextErr:null,
         mainTextErr:null,
-        categErr:null,
         tagsErr:null,
         thumbnailErr:null,
         nonFieldErrs:null,
@@ -83,10 +84,11 @@ const actions = {
                 return servResp
             } else{     
                 servResp.status = err.response.status
+                servResp.categErr = err.response.data.categ
+                servResp.featuredErr = err.response.data.featured
                 servResp.titleErr = err.response.data.title
                 servResp.leadTextErr = err.response.data.lead_text
                 servResp.mainTextErr = err.response.data.main_text
-                servResp.categErr = err.response.data.categ
                 servResp.tagsErr = err.response.data.detail||err.response.tags
                 servResp.thumbnailErr = err.response.data.thumbnail
                 servResp.nonFieldErrs = err.response.data.non_field_errors

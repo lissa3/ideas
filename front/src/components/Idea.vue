@@ -55,6 +55,11 @@
                         <div class="col-lg-1 col-md-1 col-sm-1">
                                 <b-icon icon="heart-fill"></b-icon>
                         </div>
+                        <app-like 
+                            :id="idea.id"                                                    
+                            @likeChange="handleLikeChange">
+                            :idea-likes="1" 
+                        </app-like>
                         <div class="col-lg-1 col-md-1 col-sm-1">
                                 {{idea.an_likes}}
                         </div>
@@ -102,23 +107,27 @@
 // import {parseUrl} from 'query-string'
 import {stringify, parseUrl} from 'query-string'
 import {actionTypes} from '@/store/modules/ideas'
+// import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
 import {limit} from '@/helpers/vars'
 import {mapState} from 'vuex'
 import  AppPagination from '@/components/Pagination'
 import AppLoader from '@/components/Loader'
 import AppTagsList from '@/components/TagsList'
+import AppLike from '@/components/Like'
 
 export default {
     name:'AppIdea',
     data(){
         return{
-            notFoundMsg:"Sorry. Nothing found at this moment"
+            notFoundMsg:"Sorry. Nothing found at this moment",
+            ideaLikes:0 
         }
     },
     components:{
          AppPagination,
          AppLoader,
-         AppTagsList
+         AppTagsList,
+         AppLike
     },
     props:{
         apiUrl:{
@@ -150,9 +159,26 @@ export default {
          return this.currentPage * limit - limit
         }, 
         ideasToDisplay(){
-            return this.total>0
-                
-        }     
+            return this.total>0                
+        } ,
+        handleLikeChange(likeInfo){
+            console.log("parent sees",likeInfo)
+            // this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
+           // .then((resp)=>{
+                // if(resp.status===200){
+                //     this.likeState = resp.data.like
+                //     console.log("req like Done")
+                    // update like on front
+                    // if(this.likeState ===true){
+                    //     this.idea.an_likes +=1
+                    // }else{
+                    //     this.idea.an_likes -=1
+                    // } 
+                    // this.ideaLikes = this.idea.an_likes
+                    // console.log("setting a new state for like",likeState)     
+               // }
+            //})
+        },    
                   
     },    
     watch: {
@@ -274,5 +300,9 @@ export default {
     color:rgb(185, 221, 185)
 
 }
-
+/* likes */
+.click-like{
+  cursor: pointer;
+  padding:6px;
+}
 </style>

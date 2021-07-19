@@ -27,7 +27,8 @@ export const mutationTypes = {
 }
 export const actionTypes = {
     getIdeas:'[ideas] Get ideas',
-    searchIt:'[ideas] Make search in ideas'
+    searchIt:'[ideas] Make search in ideas',
+    
 }
 
 const actions = {
@@ -50,6 +51,7 @@ const actions = {
             commit(mutationTypes.GET_IDEAS_FAILURE)
         }          
     },
+    
 
 }
 const mutations = {

@@ -32,21 +32,30 @@
     export default {
         name:"AppCategInput",
         props:{
-        placeholder: { type: String },
-        setCategNames: { type: Array }
-        },         
-        data(){
-            return {
-                category:'',               
-                
+            placeholder: { type: String },
+            setCategNames: { type: Array },
+            categ:{
+                type:Number,
+                required:true
             }
         },
+        data(){
+            return {
+                category:this.categ
+            }
+        },         
+        
         methods:{
             catVal(){
                 // this.category 'number'
-                this.$emit('getCateg', this.category);
+                this.$emit('getCateg', this.getCateg);
             }
         },
+        computed:{
+            getCateg(){
+                return this.category
+            }
+        }
         
     }
 </script>

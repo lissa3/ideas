@@ -27,14 +27,29 @@ C Ideas (via drf router) ipv id ||=> slug
 GET /api/v1/ideas-collection/ideas/(slug=first-post-ysMr)/
 DELETE /api/v1/ideas-collection/ideas/slug/
 
-POST /api/v1/ideas-collection/ideas/idea/  (Content-Type: multipart/form-data )=> resp.status = 201
-when idea created: 
-= tags are not required,default = "" will be send to dj server;
-= otherwise: send tag's string (len <50 chars)
-= dj server sends back obj new idea with tags as an array of tags separated by comma
-front: checks for input tags string length(vuelidate), lowecase and trim
-back: clears tags further from possible: ,.:;'*)/(!") 
-error tag from backend: err.response.data.detail (len > limit 50 chars)
+// create and edit
+POST /api/v1/ideas-collection/ideas/idea/  (Content-Type: multipart/form-data )
+    when idea created:
+POST (ideaInput)=>axios.post(`/api/v1/ideas-collection/ideas/`,ideaInput)=> resp.status = 201    
+        tags:   
+                = are not required,default = "" will be send to dj server;
+                = otherwise: send tag's string (len <50 chars)
+                = dj server sends back obj new idea with tags as an array of tags separated by comma
+                front: checks for input tags string length(vuelidate), lowecase and trim
+                back: clears tags further from possible: ,.:;'*)/(!") 
+                error tag from backend: err.response.data.detail (len > limit 50 chars)
+
+        thumbnail:    
+                = are not required,default = "" will be send to dj server; (?)       
+                
+                front: checks for img. size and extentions; 
+                back: checks for img size in serializer validatior
+     when idea edited:
+
+ PUT       (slug,ideaInput)=> axios.put(`/api/v1/ideas-collection/ideas/${slug}/`,ideaInput)=>resp.status = 200 OK
+
+// do like: idea id, likeInfo = {"like":boolean}
+PATCH       (likeInfo)=> axios.patch(`/api/v1/ideas-collection/relations/${likeInfo.id}/`,likeInfo.like)=>resp.status = 200 OK   
 
 =======================================================================================================
 

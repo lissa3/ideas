@@ -30,6 +30,7 @@ export const mutationTypes = {
 export const actionTypes = {
     getIdea:'[single idea] Get one idea',
     deleteIdea:'[single idea] Delete idea',
+    handleLike:'[ideas] Change line',
     
     
 }
@@ -48,7 +49,7 @@ const mutations = {
         state.isLoading = false
         state.error=error
     },
-    // at this point they do (almost) nothing but draft for feauture
+    // at this point delete func does not much but nice to have for feature
     [mutationTypes.DELETE_IDEA_LOADING](){},   
     [mutationTypes.DELETE_IDEA_SUCCESS](state){        
         state.data = null
@@ -91,6 +92,22 @@ const actions = {
             commit(mutationTypes.DELETE_IDEA_FAILURE,err)        
         }          
     },
+    // async [actionTypes.register]({commit},creds){
+    async [actionTypes.handleLike]({commit},likeInfo){
+      
+        // commit(mutationTypes.SET_IDEAS_LOADING);
+        
+        try{
+            // console.log(obj.like)          
+            const resp = await ideaAPI.giveLike(likeInfo)            
+            // console.log("response getIdeas is",resp.data)                      
+            return resp            
+
+        } catch(err){
+            console.log("error by getIdea request",err)
+            
+        }          
+    }
     
 }
 

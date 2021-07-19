@@ -1,19 +1,16 @@
 <template>
 <div class="container-fluid mt-3">
-      <h3 class="mb-4 text-center">Create a new Idea</h3>
-      <!-- <p>create errs:{{validationErrors}}</p> -->
-
+      <h3 class="mb-4 text-center">Edit your Idea</h3>
       <div class="row py-3">
-<!-- loader           -->
-            <!-- <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
-              <app-loader v-if="isSubmitting"></app-loader>
-            </div> -->
-<!-- errors     -->            
+<!-- loader   fetch        -->
+            <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
+              <app-loader v-if="isLoading"></app-loader>
+            </div>        
 
 <!-- form             -->
             <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">            
-                <app-idea-form 
-                  :categories="categories"
+                <app-idea-form v-if="initialValues"
+                  :categories ="categList" 
                   :initial-values="initialValues"
                   :errors="servResp"
                   :is-submitting="isSubmitting"
@@ -25,7 +22,7 @@
             <!-- <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
               <app-loader></app-loader>
             </div>-->
-            <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
+           <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
               <app-loader v-if="loadImg"></app-loader>
             </div> 
     </div>  
@@ -37,13 +34,15 @@ import {mapState} from 'vuex'
 import AppIdeaForm from '@/components/IdeaForm'
 // import AppValidationErrors from '@/components/ValidationErrors'
 import {actionTypes as categActionType} from '@/store/modules/categForm'
-import {actionTypes as ideaActionType} from '@/store/modules/ideaCreative'
+import {actionTypes as ideaActionType} from '@/store/modules/ideaEdit'
+import tagsHelp from '@/helpers/tagsHelper'
+
 import AppLoader from '@/components/Loader'
 
 // import mapState from 'vuex'
 
 export default {
-  name: 'AppIdeaCreate',
+  name: 'AppIdeaEdit',
   components:{
     AppIdeaForm,
     AppLoader,
@@ -51,21 +50,13 @@ export default {
   },
   data(){
     return {
-      categories:[],
-      initialValues:{
-        // only categ field should be pre-filled
-        categ:0,
-        title:'',
-        leadText:'',
-        mainText:'',
-        thumbnail:null,
-        featured:false,
-        tags:''
-        },
-        servResp:{
+      categList:[],
+      // initial values should be computed property
+      // only categ field should be pre-filled      
+      servResp:{
           status:null,
           categErr:null,
-          featuredErr:null,
+          featured:null,
           titleErr:null,
           leadTextErr:null,
           mainTextErr:null,
@@ -81,19 +72,21 @@ export default {
   },
   methods:{   
     submitEd(ideaInput){      
-    //  console.log("idea create vue gets input from form",ideaInput)     
-      
-     this.$store.dispatch(ideaActionType.createIdea,ideaInput)
+      const slug = this.$route.params.slug 
+     console.log("slug in rout is",ideaInput)    
+    // this.$store.dispatch(singleIdeaActionType.getIdea,{slug:this.$route.params.slug}) 
+     this.$store.dispatch(ideaActionType.editIdea,{slug,ideaInput})
      .then((resp)=>{
        console.log("status",resp.status)
        console.log("resp",resp)
-       if(resp.slug||resp.status ===201){
-          this.loadImg = true
+       if(resp.status ===200){
+        this.loadImg = true
          setTimeout(()=>{           
-            this.$router.push({name:'ideaDetail',params:{slug:resp.slug} })
-            this.loadImg = false                  
+            this.$router.push({name:'ideaDetail',params:{slug} }) 
+            // tmp loader stops after 4 sec (waiting for img upload to aws)
+            this.loadImg = false                 
           },4000)
-        this.$router.push({name:'ideaDetail',params:{slug:resp.slug} })      
+        // this.$router.push({name:'ideaDetail',params:{slug} })      
        }else if(resp.servDown){
          this.servResp.netWorkErr = 'Sorry. Our server is enduring some problems.Please try later'
        }else if(resp.status === 500){
@@ -101,20 +94,24 @@ export default {
        }else{
          console.log("err response in vue",resp)
             this.servResp.categErr = resp.categErr
-            this.servResp.featuredErr = resp.featuredErr 
             this.servResp.titleErr = resp.titleErr
             this.servResp.leadTextErr = resp.leadTextErr
             this.servResp.mainTextErr = resp.mainTextErr
             this.servResp.tagsErr = resp.tagsErr
+            this.servResp.featuredErr = resp.featuredErr
             this.servResp.thumbnail = resp.thumbnailErr
             this.servResp.nonFieldErr = resp.nonFieldErr
-          }       
+          } 
+          
          
      }).catch(err=> console.log("final err",err))
-    //  this.loadImg = false 
+   
     }
   },
   created(){
+    // fetching array of categories
+    const slug=this.$route.params.slug
+    console.log("created method calling with slug",slug)
     this.$store.dispatch(categActionType.getCategsForm)
     .then((resp) => {
       // console.log("resp",resp)
@@ -128,21 +125,48 @@ export default {
       ]
       resp.forEach((item) => {
         arrCategNames.push({ text: item.name, value: item.id })
-        
       })
-      this.categories = arrCategNames
-      
+      this.categList = arrCategNames      
       
     })
-    .catch(err=>console.log(err))
+    .catch(err=>console.log(err)),
+
+    // fetching idea
+    // const slug = this.$route.params.slug
+    this.$store.dispatch(ideaActionType.getIdea,slug)
+    .then((resp)=>{
+      console.log("idea to edit fetched",resp.status)
+    }).catch(err=>console.log("can't fetch idea with this slug",err))
   },
     computed:{
           ...mapState({
-              isSubmitting: state=> state.ideaCreative.isSubmitting,
-              validationErrors: state=>state.ideaCreative.servErrs,
+              isLoading:state=>state.ideaEdit.isLoading,
+              isSubmitting: state=> state.ideaEdit.isSubmitting,
+              idea:state=>state.ideaEdit.idea
+              // validationErrors: state=>state.ideaCreative.servErrs,
               // tags:state=>state.ideaCreative.data
 
           }),
+          initialValues(){
+            if(!this.idea){
+              return null
+              // return {categ:'',title:'',leadText:'',mainText:'',tags:'',thumbnail:'',featured:''}
+            }else{
+              const tagToString = tagsHelp.convertTagsListToString(this.idea.tags)
+              return {
+                categ:this.idea.categ,
+                categName:this.idea.categ_name,
+                title:this.idea.title,
+                leadText:this.idea.lead_text,
+                mainText:this.idea.main_text,
+                featured : this.idea.featured,
+                tags:tagToString,
+                thumbnail:this.idea.thumbnail,
+                slug:this.idea.slug
+
+              }
+            }
+          }
           
       }
   

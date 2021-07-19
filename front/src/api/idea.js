@@ -12,15 +12,33 @@ const getOneIdea = (slug)=>{
 const deleteIdea = (slug)=>{
     return axios.delete(`/api/v1/ideas-collection/ideas/${slug}/`)
 }
+// looks like getOneIdea but it's NOT; get idea before editing
+const getIdeaBeforeEdit = (slug)=>{
+    return axios.get(`api/v1/ideas-collection/ideas/${slug}/`)
+    
+}
 
 const createIdea = (ideaInput)=>{
     return axios.post(`/api/v1/ideas-collection/ideas/`,ideaInput)
+}
+
+const editIdea = (slug,ideaInput)=>{
+    return axios.put(`/api/v1/ideas-collection/ideas/${slug}/`,ideaInput)
+}
+
+const giveLike = (likeInfo)=>{
+    // return axios.patch(`/api/v1/ideas-collection/relations/1/`,like)
+    return axios.patch(`/api/v1/ideas-collection/relations/${likeInfo.id}/`,likeInfo.like)
+    
 }
 export default {    
     getIdeas,
     getOneIdea,
     deleteIdea,
-    createIdea
+    createIdea,
+    editIdea,
+    getIdeaBeforeEdit,
+    giveLike
     
 
 }    

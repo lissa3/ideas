@@ -15,21 +15,24 @@ GET localhost:8000/auth/users/me/ (in headers: 'JWT ey...gghghgh')
 
 B Categories
 ====================================================================================================
-GET localhost:8000/api/v1/categories/              (with tree structure: for left-side menu) 
+# Tree structure for left-side menu
+GET localhost:8000/api/v1/categories/ 
 
-GET localhost:8000/api/v1/categories-create-idea/  (without tree structure: for dropdown idea create form)
+#No tree structure for drom-down idea(create/edit) form
+GET localhost:8000/api/v1/categories-create-idea/  
 example of dj serv resp:[{"name": "Keuken","id": 2},{"name": "School","id": 3}]
+#Collect ideas for a given category(categ slug)
+GET localhost:8000/api/v1/cats/slug/                
 
-GET localhost:8000/api/v1/cats/slug/                (ideas for a given category)
-
-C Ideas (via drf router) ipv id ||=> slug
+C Ideas (slug)
 =====================================================================================================
 GET /api/v1/ideas-collection/ideas/(slug=first-post-ysMr)/
 DELETE /api/v1/ideas-collection/ideas/slug/
 
-// create and edit
-POST /api/v1/ideas-collection/ideas/idea/  (Content-Type: multipart/form-data )
-    when idea created:
+# create and edit idea general info: need Content-Type: multipart/form-data 
+general note: POST /api/v1/ideas-collection/ideas/idea/  
+
+#idea created:
 POST (ideaInput)=>axios.post(`/api/v1/ideas-collection/ideas/`,ideaInput)=> resp.status = 201    
         tags:   
                 = are not required,default = "" will be send to dj server;
@@ -44,12 +47,18 @@ POST (ideaInput)=>axios.post(`/api/v1/ideas-collection/ideas/`,ideaInput)=> resp
                 
                 front: checks for img. size and extentions; 
                 back: checks for img size in serializer validatior
-     when idea edited:
+#idea edited:
 
- PUT       (slug,ideaInput)=> axios.put(`/api/v1/ideas-collection/ideas/${slug}/`,ideaInput)=>resp.status = 200 OK
+PUT     (slug,ideaInput)=> axios.put(`/api/v1/ideas-collection/ideas/${slug}/`,ideaInput)
+        resp.status = 200 OK
 
-// do like: idea id, likeInfo = {"like":boolean}
-PATCH       (likeInfo)=> axios.patch(`/api/v1/ideas-collection/relations/${likeInfo.id}/`,likeInfo.like)=>resp.status = 200 OK   
+# do like: idea id, likeInfo = {"like":boolean}
+PATCH   (likeInfo)=> axios.patch(`/api/v1/ideas-collection/relations/${likeInfo.id}/`,likeInfo.like) 
+        resp: status = 200 OK, data = {"like":true/false} 
+
+# do rating: idea id, rateInfo = {"rating":1-5}
+PATCH   (ratingInfo)=> axios.patch(`/api/v1/ideas-collection/relations/${rating.id}/`,rateInfo.rating) 
+        resp: status = 200 OK, data = {"rating":true/false}   
 
 =======================================================================================================
 

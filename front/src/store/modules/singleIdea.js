@@ -6,16 +6,7 @@ const state = {
     error:null,    
     
 }
-// const getters = {
-//     [getterTypes.ideaAuthor]:state=>{
-//         return state.user||JSON.parse(localStorage.getItem('user'))
-//       },
-// }
 
-// export const getterTypes = {
-//     ideaAuthor:'[single idea] idea author',
-    
-//   }
 export const mutationTypes = {
     SET_IDEA_LOADING:'[single idea] Load idea start',
     GET_IDEA_SUCCESS:'[single idea] Get idea success',
@@ -24,14 +15,20 @@ export const mutationTypes = {
     DELETE_IDEA_LOADING:'[single idea] DELETE idea start',
     DELETE_IDEA_SUCCESS:'[single idea] DELETE idea success',
     DELETE_IDEA_FAILURE:'[single idea] DELETE idea failure',
-   
-}
 
+    LIKE_START:'[single idea] GIVE like start',
+    SET_LIKE_SUCCESS:'[single idea] SET idea success',
+    LIKE_FAILURE:'[single idea] LIKE idea failure',
+
+    RATING_START:'[single idea] GIVE rating start',
+    SET_RATING_SUCCESS:'[single idea] SET rating success',
+    RATING_FAILURE:'[single idea] RATING idea failure',   
+}
 export const actionTypes = {
     getIdea:'[single idea] Get one idea',
     deleteIdea:'[single idea] Delete idea',
-    handleLike:'[ideas] Change line',
-    
+    handleLike:'[single idea] Handle Like',
+    handleRating:'[single idea] Handle Rating',   
     
 }
 const mutations = {
@@ -56,7 +53,17 @@ const mutations = {
     }, 
     [mutationTypes.DELETE_IDEA_FAILURE](state,err){
         state.error = err
-    },    
+    },
+    [mutationTypes.LIKE_START](state){},
+    [mutationTypes.SET_LIKE_SUCCESS](state){},
+    [mutationTypes.LIKE_FAILURE](state,err){
+        state.error,err
+    },
+    [mutationTypes.RATING_START](state){},
+    [mutationTypes.SET_RATING_SUCCESS](state){},
+    [mutationTypes.RATING_FAILURE](state,err){
+        state.error,err
+    },       
     
 }
 const actions = {
@@ -93,21 +100,37 @@ const actions = {
         }          
     },
     // async [actionTypes.register]({commit},creds){
-    async [actionTypes.handleLike]({commit},likeInfo){
-      
-        // commit(mutationTypes.SET_IDEAS_LOADING);
-        
+    async [actionTypes.handleLike]({commit},likeInfo){      
+        commit(mutationTypes.LIKE_START);        
         try{
             // console.log(obj.like)          
-            const resp = await ideaAPI.giveLike(likeInfo)            
-            // console.log("response getIdeas is",resp.data)                      
+            const resp = await ideaAPI.giveLike(likeInfo) 
+            commit(mutationTypes.SET_LIKE_SUCCESS);           
+            // resp.data = {"like":true/false}                      
             return resp            
 
         } catch(err){
             console.log("error by getIdea request",err)
+            commit(mutationTypes.LIKE_FAILURE,err); 
             
         }          
-    }
+    },
+    async [actionTypes.handleRating]({commit},ratingInfo){      
+        commit(mutationTypes.RATING_START);  
+        console.log("rating info from singleIdea store",ratingInfo)      
+        try{
+            // console.log(obj.like)          
+            const resp = await ideaAPI.giveRating(ratingInfo) 
+            commit(mutationTypes.SET_RATING_SUCCESS);           
+            // resp.data = {"rating":3}                      
+            return resp           
+
+        } catch(err){
+            console.log("error by getIdea request",err)
+            commit(mutationTypes.RATING_FAILURE,err); 
+            
+        }          
+    },
     
 }
 

@@ -62,10 +62,14 @@ class IdeaViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['featured','view_count']
     search_fields = ['title', 'lead_text', 'main_text']
+    # Explicitly specify which fields the API may be ordered against
+    ordering_fields = ('title', 'created_at')
+    # This will be used as the default ordering
+    ordering = ('-created_at')
     
-    ordering = ('title','created_at')
     # for testing
     # pagination_class=None
+    
     
 
     def get_queryset(self):
@@ -74,9 +78,7 @@ class IdeaViewSet(viewsets.ModelViewSet):
             an_likes=Count(Case(When(useridearelation__like=True, then=1))),
             avg_rate=Avg('useridearelation__rating'),
             )
-        # sqlite dictinct(raise NotSupportedError('DISTINCT ON fields is not supported by this database backend'))
-        return queryset
-
+        return queryset    
     def update(self, request, *args, **kwargs):
         """let op: don't save twice to avoid err msg: file not img||corrupt"""
 

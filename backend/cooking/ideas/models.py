@@ -120,9 +120,8 @@ class Idea(TimeStamp):
     def __str__(self):
         return self.title
 
-    #
-    class Meta:
-        ordering = ['-created_at']
+    
+    
 
     # only for dev test ( for prod aws s3 url)
     # @property

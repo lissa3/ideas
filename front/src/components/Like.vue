@@ -1,12 +1,27 @@
 <template>
-    <div class="click-like"  @click="doLike">
-        <span>Like &nbsp; <b-icon-heart-fill></b-icon-heart-fill><span class="px-1"></span></span>
-        <span class="px-1">{{ideaLikes}}</span>
+<div class="list-group list-group-horizontal">
+    <div :class="{'btn':true,'btn-sm':true,
+                'btn-outline-secondary':likeToToggle,
+                'btn-outline-success':!likeToToggle}"
+         @click="doLike">
+        <div class="click-like">
+          <div class="px-1 ">Like &nbsp; <b-icon-heart-fill></b-icon-heart-fill><span class="px-1"></span></div>
+
+        </div>
+    </div>    
+    <div class="px-2 zoo">
+            <span class="px-1" v-if="isLiked===null">{{ideaLikes}}</span>
+            <span class="px-1" v-else>{{newLikeVal}}</span>
+
     </div>
+
+        
+    
+</div>
 </template>
 
 <script>
-// import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
+import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
 export default {
     name:'Like',
     props:{
@@ -21,7 +36,9 @@ export default {
     },
     data(){
         return{        
-        likeToToggle:false,  
+        likeToToggle:false,         
+        newLikeVal:this.ideaLikes,
+        isLiked:null
         }
     },
     methods:{
@@ -31,25 +48,37 @@ export default {
         const likeInfo = {
                     like:{"like":this.likeToToggle},
                     id:this.id
-        }; 
-        this.$emit('likeChange',likeInfo) 
-        // this.likeToToggle = this.likeState  
-        // this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
-        // .then((resp)=>{
-        //     if(resp.status===200){
-        //         const likeState = resp.data.like
-        //         this.$emit('likeChange',likeState)
-            // // update like on front
-            // if(likeState ===true){
-            //     this.idea.an_likes +=1
-            // }else{
-            //     this.idea.an_likes -=1
-            // } 
-            // // console.log("setting a new state for like",likeState)     
-            // this.likeToToggle = likeState;   
-        //    }
-     // })      
-    },
-  }
+        };
+        this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
+        .then((resp)=>{
+            if(resp.status==200){
+                this.isLiked = resp.data.like                          
+            }
+            if(this.isLiked===true){
+                    this.newLikeVal ++                    
+            }else{
+                this.newLikeVal = this.newLikeVal -1                
+            }
+            this.isLiked = !this.isLiked
+          })
+      },
+    }, 
+
 }
+
 </script>
+<style scoped>
+.click-like{
+  cursor: pointer;
+  padding:3px;
+  
+
+  
+}
+.zoo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+</style>

@@ -43,7 +43,15 @@
                     <p>by <strong>{{idea.owner_idea}}</strong></p>    
                 </div> 
                 <div class="idea-title mb-2">
-                        <p>Rating</p>
+                    <div>
+                        <p v-if="idea.avg_rate">
+                        <strong>Rating: {{idea.avg_rate}}</strong>
+                        </p>
+                        <p v-else>
+                            <strong>No rating yet</strong>
+                        </p>
+                    </div>
+
                 </div> 
                 <div class="mb-2">
                     <div class="row">
@@ -52,17 +60,18 @@
                             <span>{{idea.created_at| filterDateTime}}</span>
                             </div>
                         </div>
-                        <div class="col-lg-1 col-md-1 col-sm-1">
+                        <!-- <div class="col-lg-1 col-md-1 col-sm-1">
                                 <b-icon icon="heart-fill"></b-icon>
-                        </div>
+                        </div> -->
                         <app-like 
-                            :id="idea.id"                                                    
-                            @likeChange="handleLikeChange">
-                            :idea-likes="1" 
+                            :id="idea.id"            
+                            
+                            :idea-likes="idea.an_likes"> 
                         </app-like>
-                        <div class="col-lg-1 col-md-1 col-sm-1">
+                        <!-- @likeChange="handleLikeChange" -->
+                        <!-- <div class="col-lg-1 col-md-1 col-sm-1">
                                 {{idea.an_likes}}
-                        </div>
+                        </div> -->
                     </div>
                 </div>                
                 <div class="idea-main-text mb-2">
@@ -160,25 +169,7 @@ export default {
         }, 
         ideasToDisplay(){
             return this.total>0                
-        } ,
-        handleLikeChange(likeInfo){
-            console.log("parent sees",likeInfo)
-            // this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
-           // .then((resp)=>{
-                // if(resp.status===200){
-                //     this.likeState = resp.data.like
-                //     console.log("req like Done")
-                    // update like on front
-                    // if(this.likeState ===true){
-                    //     this.idea.an_likes +=1
-                    // }else{
-                    //     this.idea.an_likes -=1
-                    // } 
-                    // this.ideaLikes = this.idea.an_likes
-                    // console.log("setting a new state for like",likeState)     
-               // }
-            //})
-        },    
+        },        
                   
     },    
     watch: {
@@ -212,7 +203,11 @@ export default {
             
             // console.log("calling store func for request")           
             //this.$store.dispatch(actionTypes.getIdeas, {apiUrl: this.apiUrl})       
-            this.$store.dispatch(actionTypes.getIdeas, {apiUrl: apiUrlWithParams})       
+            this.$store.dispatch(actionTypes.getIdeas, {apiUrl: apiUrlWithParams})
+            // .then((resp)=>{
+            //     console.log("Ok")
+            // })
+            // .catch(err=>console.log("getIdea error",err))       
             },
     },    
     

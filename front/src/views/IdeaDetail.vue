@@ -56,8 +56,7 @@
                   <b-icon-trash></b-icon-trash>Delete Idea 
                 </div>            
               </div>     
-            </template>    
-         
+            </template>   
           </div>          
         </div>
     </section>    
@@ -82,9 +81,9 @@
                     </div>
                 </div>  
                 <div class="d-flex justify-content-end mt-3 px-3 ">
-                  <div class="d-flex justify-content-between flex-sm-row-reverse">
+                  <div class="d-flex justify-content-between">
                     <div class="px-1"><span>Rating: </span><b-icon-star-fill></b-icon-star-fill>
-                      <span class="px-1"><strong>5&nbsp;&nbsp;</strong></span>
+                      <span class="px-1"><strong>&nbsp;&nbsp;{{idea.avg_rate}}</strong></span>
                     </div>
                     <div class="box d-flex px-1">              
                       <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
@@ -93,13 +92,15 @@
                       <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
                       <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
                     </div>
-                  </div>
-                  <!-- <div class="click-like"  @click="doLike">
-                    <span>Like &nbsp; <b-icon-heart-fill></b-icon-heart-fill><span class="px-1"></span></span>
-                    <span class="px-1">{{idea.an_likes}}</span>
-                  </div> -->
+                  </div>               
                   
                 </div>
+                <div class="d-flex justify-content-end mt-3 px-3 ">
+                  
+                    <p v-if="thxRating" class="thanks">Thank you for giving a rating</p>
+                 
+                     
+                </div>         
                 <div class="card-body">                   
                 </div>               
                 <div class="card-text px-3">
@@ -124,8 +125,8 @@
                     </div> -->
                       <app-like 
                         :id="idea.id" 
-                        :idea-likes="showLike"                                                
-                        @likeChange="handleLikeChange">
+                        :idea-likes="idea.an_likes"                                            
+                        >
                       </app-like>
                     <small class="text-muted">9 mins</small>
                   </div>
@@ -174,8 +175,9 @@ export default {
   data(){
     return{
       makeModalVisible: false,
-      // likeToToggle:false, 
-      ideaLikes:0 
+      thxRating:null
+      
+      // ideaLikes:0 
     }
   },
   computed:{            
@@ -218,55 +220,27 @@ export default {
         }
       })      
     },
-    doStar(val){
-      console.log(val)
-    },
-    handleLikeChange(likeInfo){
-      console.log("parent sees",likeInfo)
-      this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
+    async doStar(rateNum){
+      console.log(rateNum)      
+      console.log("click on start",rateNum);  
+      const ratingData = {'rating':rateNum} 
+      const ratingInfo = {
+                    rating:ratingData,
+                    id:this.idea.id
+        }; 
+      console.log("rating to server",ratingInfo) 
+      this.$store.dispatch(singleIdeaActionType.handleRating,ratingInfo)  
       .then((resp)=>{
         if(resp.status===200){
-          this.likeState = resp.data.like
-          // update like on front
-          if(this.likeState ===true){
-            this.idea.an_likes +=1
-          }else{
-            this.idea.an_likes -=1
-          } 
-          this.ideaLikes = this.idea.an_likes
-          // console.log("setting a new state for like",likeState)     
-              
-    
-
+          console.log("dj serv give status 200")
+          this.thxRating = true
+           setTimeout(()=>{
+                 this.thxRating = false
+               },1000)
+         
         }
-      })
-    },
-    // async doLike(){
-    //   console.log("like now is",this.likeToToggle)
-    //   this.likeToToggle = !this.likeToToggle;
-    //   const likeInfo = {
-    //             like:{"like":this.likeToToggle},
-    //             id:this.idea.id
-    //   };      
-     
-    //   this.$store.dispatch(singleIdeaActionType.handleLike,likeInfo)
-    //   .then((resp)=>{
-    //     if(resp.status===200){
-    //       const likeState = resp.data.like
-    //       // update like on front
-    //       if(likeState ===true){
-    //         this.idea.an_likes +=1
-    //       }else{
-    //         this.idea.an_likes -=1
-    //       } 
-    //       // console.log("setting a new state for like",likeState)     
-    //       this.likeToToggle = likeState;    
-    
-
-    //     }
-    //   })
-      
-    // },
+      })      
+    },      
     showModal(){
       console.log("user wants to delte his idea")
       this.makeModalVisible = true;
@@ -354,7 +328,8 @@ export default {
 .b5:hover ~ p{
     color:black;
 }
-/* .idea-main-text {
-  padding
-} */
+
+.thanks{
+  background-color: rgb(229, 205, 173);
+}
 </style>

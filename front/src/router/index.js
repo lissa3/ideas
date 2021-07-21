@@ -12,6 +12,7 @@ import IdeaGeneral from '@/views/IdeaGeneral'
 import IdeaSearch from '@/views/IdeaSearch'
 import IdeaDetail from '@/views/IdeaDetail'
 import IdeaCreate from '@/views/IdeaCreate'
+import IdeaEdit from '@/views/IdeaEdit'
 import IdeaFilter from '@/views/IdeaFilter'
 import CategIdeas from '@/views/CategIdeas'
 import Login from '@/views/auth/Login'
@@ -105,9 +106,9 @@ const routes = [
     component: IdeaCreate
   },
   {   
-    path: '/idea-edit:slug',
-    name: 'editIdea', //TODO
-    component: IdeaCreate
+    path: '/idea-edit/:slug',
+    name: 'editIdea', 
+    component: IdeaEdit
   },
   
   {

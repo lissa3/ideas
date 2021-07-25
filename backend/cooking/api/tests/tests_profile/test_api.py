@@ -28,7 +28,7 @@ class ProfileSerializerTesCase(APITestCase):
     def test_get_single_profile_owner(self):
         """ user profile owner can READ profile"""
         self.client.force_authenticate(user=self.user1)
-        url = reverse('profile-info', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         print("EXAMOLE PROFFILE URL", url)
         response = self.client.get(url)
         serial_profile = ProfileSerializer(self.profile).data
@@ -38,7 +38,7 @@ class ProfileSerializerTesCase(APITestCase):
     def test_get_single_profile_staff(self):
         """ user staff can READ profile of others"""
         self.client.force_authenticate(user=self.user_staff)
-        url = reverse('profile-info', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         response = self.client.get(url)
         serial_profile = ProfileSerializer(self.profile).data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -47,7 +47,7 @@ class ProfileSerializerTesCase(APITestCase):
     def test_get_profile_by_not_owner(self):
         """ user NOT profile owner can't READ profile"""
         self.client.force_authenticate(user=self.user2)
-        url = reverse('profile-info', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -56,7 +56,7 @@ class ProfileSerializerTesCase(APITestCase):
         """ user profile owner can DELETE his profile"""
         start_count = Profile.objects.count()
         self.client.force_authenticate(user=self.user1)
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         resp = self.client.delete(url)
         final_count = Profile.objects.count()
         self.assertEqual(resp.status_code, 204)
@@ -66,7 +66,7 @@ class ProfileSerializerTesCase(APITestCase):
         """ user staff can DELETE given profile"""
         start_count = Profile.objects.count()
         self.client.force_authenticate(user=self.user_staff)
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         resp = self.client.delete(url)
         final_count = Profile.objects.count()
         self.assertEqual(resp.status_code, 204)
@@ -76,7 +76,7 @@ class ProfileSerializerTesCase(APITestCase):
         """ user = !profile owner can't  DELETE profile of others"""
         start_count = Profile.objects.count()
         self.client.force_authenticate(user=self.user2)
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         resp = self.client.delete(url)
         final_count = Profile.objects.count()
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
@@ -87,7 +87,7 @@ class ProfileSerializerTesCase(APITestCase):
         """ user == owner of the profile can change his profile"""
         self.client.force_authenticate(user=self.user1)
         initial_website = self.profile.website
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         modified_profile = {
             "website": "http://www.jane.web-site.com"
         }
@@ -105,7 +105,7 @@ class ProfileSerializerTesCase(APITestCase):
         """ user == profiel owner gets error if link broken"""
         self.client.force_authenticate(user=self.user1)
         initial_website = self.profile.website
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         modified_profile = {
             "website": "httpwww.fhfhhf.com"
         }
@@ -116,12 +116,13 @@ class ProfileSerializerTesCase(APITestCase):
         self.profile.refresh_from_db()
         self.user1.refresh_from_db()
         self.assertEqual(resp.status_code, 400)
-        # self.assertNotEqual(initial_website, modified_website)
+        self.assertNotEqual(initial_website, modified_website)
 
     def test_put_update_profile_not_owner(self):
         """ user not owner of given profile CAN'T CHANGE the profile"""
         self.client.force_authenticate(user=self.user2)
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
+        initial_profile_website = self.profile.website
         modified_profile = {
             "website": "https://boze-wolf-user.com"
 
@@ -133,12 +134,13 @@ class ProfileSerializerTesCase(APITestCase):
         # resp = self.client.put(url, data=json_edited_idea, content_type='application/json')
         self.profile.refresh_from_db()
         self.user1.refresh_from_db()
+        self.assertEqual(initial_profile_website,self.profile.website)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_put_update_profile_staff(self):
         """ user == staff can change any profile"""
         self.client.force_authenticate(user=self.user_staff)
-        url = reverse('profile-detail', kwargs={"unid": self.user1.profile.unid})
+        url = reverse('profile-owner', kwargs={"unid": self.user1.profile.unid})
         modified_profile = {
             "website": "https://www.linked-in/help-for-my-user-site.com",
 

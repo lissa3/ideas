@@ -62,7 +62,7 @@ class IdeaTestCase(APITestCase):
         )
         self.ideas = Idea.objects.annotate(an_likes=Count(
             Case(When(useridearelation__like=True, then=1))), avg_rate=Avg('useridearelation__rating'),
-            )
+            ).order_by('-created_at')
 
 
     def test_create_idea(self):
@@ -306,7 +306,7 @@ class IdeaApiSearchOrderingTestCase(APITestCase):
         ideas = Idea.objects.annotate(an_likes=Count(Case(When(useridearelation__like=True, then=1))),
                                       avg_rate=Avg('useridearelation__rating'),
                                       ).filter(
-            id__in=(self.idea1.id,self.idea2.id, self.idea3.id))
+            id__in=(self.idea1.id,self.idea2.id, self.idea3.id)).order_by('-created_at')
         url = reverse('idea-list')
         serializer_data = IdeaSerializer(ideas, many=True).data
         resp = self.client.get(url, data={"search": "rio"})

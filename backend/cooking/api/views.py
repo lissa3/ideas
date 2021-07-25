@@ -114,25 +114,10 @@ class TagIdeasListName(generics.ListAPIView):
 
 class ProfileRetrView(generics.RetrieveAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = (IsOwnerOrIsStaff,)
+    permission_classes = (AllowAny,)
     queryset = Profile.objects.all()
 
-    def get_object(self):
-        try:
-            """ checking of the user is banned = here """
-            obj = get_object_or_404(
-                self.queryset,
-                unid=self.kwargs.get('unid'),
-            )
-            self.check_object_permissions(self.request, obj)
-            # print("object passed .check_object_permissions")
-        except APIException:
-            # TODO log attempt to get to this point
-            raise PermissionDenied
-            # return
-
-        return obj
-
+           
 
 class ProfileRetrUpdateDestrView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer

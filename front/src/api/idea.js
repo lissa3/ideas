@@ -31,6 +31,12 @@ const editIdea = (slug,ideaInput)=>{
     return axios.put(`/api/v1/ideas-collection/ideas/${slug}/`,ideaInput)
 }
 
+const getInitialLikeState = (ideaId)=>{
+    // return axios.get(`/api/v1/ideas-collection/relations/1/`) {"like": true,"rating": null}
+    return axios.get(`/api/v1/ideas-collection/relations/${ideaId}/`)
+    
+}
+
 const giveLike = (likeInfo)=>{
     // return axios.patch(`/api/v1/ideas-collection/relations/1/`,like)
     return axios.patch(`/api/v1/ideas-collection/relations/${likeInfo.id}/`,likeInfo.like)
@@ -47,6 +53,7 @@ export default {
     createIdea,
     editIdea,
     getIdeaBeforeEdit,
+    getInitialLikeState,
     giveLike,
     giveRating
     

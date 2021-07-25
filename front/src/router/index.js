@@ -21,6 +21,9 @@ import PswForgotStart from "@/views/auth/PswForgotStart"
 import SetPswReset from '@/views/auth/PswReset'
 import SetPswChange from '@/views/auth/ChangePsw'
 import PswForgotFailure from "@/views/auth/MsgPswResetFailure"
+import ProfileDetail from '@/views/auth/ProfileDetail'
+import AccountProfile from '@/views/auth/AccountProfile'
+import EditProfile from '@/views/auth/ProfileEdit'
 import IdeasByTagSlug from '@/views/IdeasByTagSlug'
 import IdeasByTagName from '@/views/IdeasByTagName'
 import NotFound from '@/views/NotFound'
@@ -142,19 +145,20 @@ const routes = [
    
   },
   {
-    path: '/settings',
-    name: 'settings',
-    component: IdeaGeneral //TODO
+    path: '/profile/:id',
+    name: 'profile',
+    component: ProfileDetail
+  },
+  // private profile routes
+  {
+    path: '/account-profile/:unid',
+    name: 'accountProfile',
+    component: AccountProfile
   },
   {
-    path: '/profiles?:id',
-    name: 'userProfile',
-    component: IdeaGeneral//TODO
-  },
-  {
-    path: '/profiles?:slug/favories',
-    name: 'userProfileFavoriets',
-    component: IdeaGeneral
+    path: '/profile-edit/:unid',
+    name: 'editProfile',
+    component: EditProfile
   },
   {
    path: '/about',

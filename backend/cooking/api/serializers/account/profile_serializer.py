@@ -3,8 +3,9 @@ from profiles.models import Profile
 from timestamp.broadcast_utils.validators import validate_size
 
 class ProfileSerializer(ser.ModelSerializer):
-    # TODO: do I need it?    
-    # user=serializers.StringRelatedField(read_only=True)
+    # TODO: do I need it? 
+    name = ser.ReadOnlyField(source='get_name')   
+    
     # user = ser.PrimaryKeyRelatedField(queryset=User.objects.all())
     # unid = ser.CharField(read_only=True)
     # user_id = ser.CharField(read_only=True)
@@ -15,4 +16,5 @@ class ProfileSerializer(ser.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('user_id', 'unid', 'website', 'image')
+        fields = ('bio','website', 'image','name')
+        # fields = ('user_id', 'unid', 'website', 'image')

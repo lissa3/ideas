@@ -36,7 +36,7 @@ class CategTestCase(APITestCase):
             main_text="Main text two"
         )
         self.idea3 = Idea.objects.create(
-            title="summer time",
+            title="third idea time",
             author=self.user2,
             categ=self.category2,
             lead_text="User 2 is great",
@@ -44,7 +44,7 @@ class CategTestCase(APITestCase):
 
         )
         self.idea4 = Idea.objects.create(
-            title="summer time",
+            title="fourth  time",
             author=self.user2,
             categ=self.category3,
             lead_text="Summer day",
@@ -56,6 +56,7 @@ class CategTestCase(APITestCase):
         self.cats = Category.objects.all()
 
     def test_get_all_ideas(self):
+        """set pagination class in viewset ideas: should be None"""
         url = reverse('category-list')
         response = self.client.get(url)
         # print("response data:", response.data)
@@ -64,24 +65,25 @@ class CategTestCase(APITestCase):
         self.assertEqual(local_serialized_data, response.data)
 
     def test_get_idea_for_category_without_children(self):
-        """set pagination class in view should be None"""
+        """set pagination class in viewset ideas: should be None"""
         url = reverse('cat-per-idea', kwargs={"slug": self.category1.slug})
         response = self.client.get(url)
-        print("resp ideas",response.data)
-        print("resp ideas legth",len(response.data))
+        # print("resp ideas",response.data)
+        #print("resp ideas",response.data)        
         local_serialized_data = IdeaSerializer(self.category1.ideas.all(), many=True).data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(local_serialized_data, response.data)
         self.assertEqual(len(response.data),2)
 
-    def test_get_no_ideas_for_given_category(self):
-        """ set pagination class in view should be None"""
-        url = reverse('cat-per-idea', kwargs={"slug": self.category2.slug})
-        # print("url", url)
-        response = self.client.get(url)
-        # print("response:", response.data)
-        # local_serialized_data = IdeaSerializer(self.category3.ideas.all(), many=True).data
-        self.assertEqual(len(response.data), 2)
+    def test_get_ideas_for_given_category_incl_children(self):
+        """ set pagination class in viewset ideas: should be None
+        exp result (ideas for categ and ideas of it's descendants (categ3))
+        """
+        url = reverse('cat-per-idea', kwargs={"slug": self.category2.slug})        
+        response = self.client.get(url) 
+        local_collection = IdeaSerializer([self.idea3,self.idea4],many=True).data     
+        self.assertEqual(len(response.data), 2)        
+        self.assertEqual(response.data,local_collection)        
         self.assertEqual(response.status_code, 200)
 
     def test_get_404_for_not_existed_category(self):

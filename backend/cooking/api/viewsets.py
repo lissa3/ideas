@@ -1,15 +1,14 @@
 from django.utils.translation import gettext_lazy as _
-# from django.core.exceptions import ValidationError
-
-# from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import When, Case, Count, Avg
+# from django.core.exceptions import ValidationError
+
 
 from rest_framework import viewsets  # , permissions
-
 from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter # built-in filters
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.mixins import UpdateModelMixin,RetrieveModelMixin
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -34,7 +33,8 @@ User = get_user_model()
 
 
 
-class IdeaRelations(UpdateModelMixin, viewsets.GenericViewSet):
+# class IdeaRelations(UpdateModelMixin,ListModelMixin, viewsets.GenericViewSet):
+class IdeaRelations(RetrieveModelMixin,UpdateModelMixin,viewsets.GenericViewSet):
     """"""
     queryset = UserIdeaRelation.objects.all()
     serializer_class = UserIdeaRelSerializer
@@ -43,18 +43,28 @@ class IdeaRelations(UpdateModelMixin, viewsets.GenericViewSet):
     pagination_class=None
 
     def get_object(self):
-        print("data from vue.js is", self.request.data)
+        # print("data from vue.js is", self.request.data)
         # print("user is", self.request.user)
         # print("idea", self.kwargs.get('idea'))
         obj, _ = UserIdeaRelation.objects.get_or_create(idea_id=self.kwargs['idea'], user=self.request.user)
         print("object created or updated", obj)
         return obj
+    # def get_queryset(self):
+    #     # let op: 2 times qs:? |=> distinct() in postgres
+    #     queryset = UserIdeaRelation.objects.annotate(
+    #         an_likes=Count(Case(When(like=True, then=1))),
+            
+    #         )
+    #     print("qs is",queryset)    
+    #     return queryset        
 
 class IdeaViewSet(viewsets.ModelViewSet):
     """ custom filter:'title','categ','featured','status','author;
     odrering default: -created at = newest on top
-    pagination for tests should be None
+    pagination for tests should be off
     """
+    pagination_class=LimitOffsetPagination
+    PAGE_SIZE = 6
     serializer_class = IdeaSerializer
     permission_classes = (IsAuthorOrIsStaffOrReadOnly,)
     lookup_field = 'slug'
@@ -67,8 +77,7 @@ class IdeaViewSet(viewsets.ModelViewSet):
     # This will be used as the default ordering
     ordering = ('-created_at')
     
-    # for testing
-    # pagination_class=None
+    
     
     
 

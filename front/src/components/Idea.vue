@@ -5,8 +5,7 @@
             <div class="row main-row" v-for="idea in ideas" :key="idea.id">
                 <div   class="col-lg-4 col-md-12 col-sm-12">
                     <div class="idea-img mb-2">
-                        <div v-if="idea.thumbnail">
-                            
+                        <div v-if="idea.thumbnail">                            
                             <img  :src="idea.thumbnail" alt="img idea" class="img-fluid">
                         </div>
                         <div v-else>
@@ -36,13 +35,15 @@
                 <div class="idea-title mb-1 mt-1">
                     <h3>
                        <router-link :to="{ name: 'ideaDetail',params:{slug:idea.slug} }"
-                       class="idea-link">{{idea.title}}</router-link>
+                       class="link">{{idea.title}}-id={{idea.id}}</router-link>
                     </h3>
                 </div> 
                 <div class="idea-title mb-2">
-                    <p>by <strong>{{idea.owner_idea}}</strong></p>    
+                    <router-link :to="{name:'profile',params:{id:idea.author}}" class="link">
+                        <p>By <strong>{{idea.owner_idea}}</strong></p>
+                    </router-link>
                 </div> 
-                <div class="idea-title mb-2">
+                <div class="idea-title mb-2 ">
                     <div>
                         <p v-if="idea.avg_rate">
                         <strong>Rating: {{idea.avg_rate}}</strong>
@@ -51,7 +52,11 @@
                             <strong>No rating yet</strong>
                         </p>
                     </div>
-
+                </div> 
+                <div class="idea-title mb-2">
+                    <div>
+                       <app-rating-show :rating="idea.avg_rate"></app-rating-show>
+                    </div>
                 </div> 
                 <div class="mb-2">
                     <div class="row">
@@ -59,29 +64,25 @@
                            <div class="idea-date mb-2">
                             <span>{{idea.created_at| filterDateTime}}</span>
                             </div>
-                        </div>
-                        <!-- <div class="col-lg-1 col-md-1 col-sm-1">
-                                <b-icon icon="heart-fill"></b-icon>
-                        </div> -->
+                        </div>                       
                         <app-like 
-                            :id="idea.id"            
-                            
-                            :idea-likes="idea.an_likes"> 
-                        </app-like>
-                        <!-- @likeChange="handleLikeChange" -->
-                        <!-- <div class="col-lg-1 col-md-1 col-sm-1">
-                                {{idea.an_likes}}
-                        </div> -->
+                            :idea-id="idea.id"         
+                            :idea-likes="idea.an_likes"  
+                            :is-logged-in="isLoggedIn"                         
+                            > 
+                        </app-like>                        
                     </div>
                 </div>                
                 <div class="idea-main-text mb-2">
                     <p>{{idea.lead_text}}</p>
                 </div>
                 <div class="idea-read-more mb-2">
-                    <button class="btn btn-outline-dark">
-                        <router-link :to="{ name: 'ideaDetail',params:{slug:idea.slug} }"
-                       class="idea-link">Read More</router-link>
-                    </button>
+                    <router-link :to="{ name: 'ideaDetail',params:{slug:idea.slug} }"
+                       class="idea-link">
+                        <button class="btn btn-outline-dark">
+                        Read More
+                        </button>                       
+                    </router-link>
                 </div>
                 <div class="idea-read-more mb-2">
                    <div v-if="idea.tags">                      
@@ -115,14 +116,20 @@
 
 // import {parseUrl} from 'query-string'
 import {stringify, parseUrl} from 'query-string'
+import {mapState,mapGetters} from 'vuex'
 import {actionTypes} from '@/store/modules/ideas'
+
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
+
+
+
 // import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
 import {limit} from '@/helpers/vars'
-import {mapState} from 'vuex'
 import  AppPagination from '@/components/Pagination'
 import AppLoader from '@/components/Loader'
 import AppTagsList from '@/components/TagsList'
 import AppLike from '@/components/Like'
+import AppRatingShow from '@/components/RatingShow'
 
 export default {
     name:'AppIdea',
@@ -136,7 +143,8 @@ export default {
          AppPagination,
          AppLoader,
          AppTagsList,
-         AppLike
+         AppLike,
+         AppRatingShow
     },
     props:{
         apiUrl:{
@@ -144,14 +152,17 @@ export default {
             required:true
         }
     },
-    computed:{            
+    computed:{                  
         ...mapState({
             ideas:state=>state.ideas.data,
             total:state=>state.ideas.count,
             isLoading:state=>state.ideas.isLoading,
             error:state=>state.ideas.error,
             prev:state=>state.ideas.prev,
-            next:state=>state.ideas.next           
+            next:state=>state.ideas.next          
+        }),
+        ...mapGetters({
+           isLoggedIn:authGetterTypes.isLoggedIn
         }),
         baseUrl() {
         //  console.log("route.path is",this.$route.path)
@@ -209,6 +220,7 @@ export default {
             // })
             // .catch(err=>console.log("getIdea error",err))       
             },
+        
     },    
     
     filters: {
@@ -283,10 +295,10 @@ export default {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
-.idea-link{
+/* .idea-link{
     text-decoration:none;
     cursor: pointer;
-    color:green
+    color:rgb(38, 44, 38)
 
 }
 .idea-link:hover{
@@ -294,10 +306,17 @@ export default {
     cursor: pointer;
     color:rgb(185, 221, 185)
 
-}
+} */
 /* likes */
 .click-like{
   cursor: pointer;
   padding:6px;
+}
+.link{
+  color:black;
+  text-decoration:none;
+}
+.link:hover{
+  color:rgb(33, 98, 84);
 }
 </style>

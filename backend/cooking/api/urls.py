@@ -8,7 +8,7 @@ from api.viewsets import IdeaViewSet, IdeaRelations
 
 router = routers.DefaultRouter()
 
-router.register(r'relations', IdeaRelations)
+router.register(r'relations', IdeaRelations) #,basename='useridearelation')
 router.register(r'ideas', IdeaViewSet, basename="idea")
 
 urlpatterns = [
@@ -17,8 +17,8 @@ urlpatterns = [
     path('cats/<slug>/', IdeasPerCategListView.as_view(), name="cat-per-idea"),
     path('ideas-collection/', include(router.urls)),
     # api for profile,userinfo (profile + user)
-    path('profile-change/<unid>/', ProfileRetrUpdateDestrView.as_view(), name="profile-detail"),
-    path('profile-info/<unid>/', ProfileRetrView.as_view(), name="profile-info"),
+    path('profile-owner/<unid>/', ProfileRetrUpdateDestrView.as_view(), name="profile-owner"),
+    path('profile-info/<pk>/', ProfileRetrView.as_view(), name="profile-info"),
     # tags
     path('tags/', TagList.as_view(), name="tags-list"),
     path('tags/<slug>/', TagIdeasListSlug.as_view(), name="tag-per-ideas-slug"),

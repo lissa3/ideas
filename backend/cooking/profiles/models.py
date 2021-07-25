@@ -27,7 +27,8 @@ class Profile(TimeStamp):
     )
     unid = models.CharField(max_length=6, blank=True, db_index=True)
     image = models.ImageField(blank=True, null=True, upload_to=upload_img,
-                              validators=[FileExtensionValidator(ALLOWED_EXTENTIONS), validate_size])    
+                              validators=[FileExtensionValidator(ALLOWED_EXTENTIONS), validate_size]) 
+    bio = models.TextField(default = "")                             
     website = models.URLField(max_length=100, default="", blank=True)
     badge_bg = models.CharField(max_length=30, default="", blank=True)
 

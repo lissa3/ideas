@@ -32,7 +32,7 @@
       <b-nav-item href="#" >
             <router-link :to="{ name: 'ideaCreate' }" class="link-decor" active-class="active"
               >New Idea</router-link>
-          </b-nav-item>
+      </b-nav-item>
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
@@ -55,9 +55,9 @@
           <template #button-content>
             <em>User</em>
           </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+            <b-dropdown-item href="#" @click="showProfile">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click="changePsw">Change Password</b-dropdown-item>
+            <!-- <b-dropdown-item href="#">Sign Out</b-dropdown-item> -->
             </b-nav-item-dropdown>  
           </template>
         
@@ -70,7 +70,7 @@
 </template>
 <script>
 import {actionTypes} from '@/store/modules/auth'
-// import {actionTypes as ideaActionTypes} from '@/store/modules/ideas'
+import {actionTypes as profileActionTypes} from '@/store/modules/profile'
 import {getterTypes} from '@/store/modules/auth'
 import {mapGetters} from 'vuex'
 export default {
@@ -94,6 +94,7 @@ export default {
     methods:{
       doSignOut(){
         // console.log("Sign out...")
+        console.log(actionTypes.signOut)
         this.$store.dispatch( actionTypes.signOut)
         location.reload();
       },
@@ -105,6 +106,18 @@ export default {
         console.log("user wants to change psw")
         this.$router.push({name:'passwordChange'}) 
         
+      },
+      showProfile(){
+        console.log("looking for profile",this.currentUser.unid)
+        const unid = this.currentUser.unid
+        console.log("str url",profileActionTypes.showPersonalInfo)
+        this.$store.dispatch(profileActionTypes.showPersonalInfo,unid)
+        .then((resp)=>{
+          if(resp.status===200){
+            this.$router.push({name:'accountProfile',params:{unid}})
+          }
+        })          
+        .catch(err=>console.log(err))
       }
     },
     mounted(){

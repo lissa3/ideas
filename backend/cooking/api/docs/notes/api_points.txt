@@ -63,8 +63,9 @@ PATCH   (ratingInfo)=> axios.patch(`/api/v1/ideas-collection/relations/${rating.
 =======================================================================================================
 
 D Profile
-GET  localhost:8000/api/v1/profile-info/            headers: Authorization: JWT token
-PATCH localhost:8000/api/v1/profile-change/unid/
+GET  localhost:8000/api/v1/profile-info/id             AllowAny
+        
+PATCH localhost:8000/api/v1/profile-owner/unid/ headers: Authorization: JWT token
 ===================================================================================================
 E Tags
 ======================================================================================================

@@ -3,7 +3,7 @@
       <section >
           <h1>Form </h1>
 <!-- loader  submit         -->
-             <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
+            <div class="col-xs-12 col-md-10 py-3 text-center offset-md-1">
               <app-loader v-if="isSubmitting"></app-loader>
             </div>
  <!-- errors          -->
@@ -27,7 +27,9 @@
                 <div class="warn mb-1" v-if="errors.categErr">
                   <ul>
                     <li v-for="err in errors.categErr" :key="err.id">
-                      {{err}}
+                      <!-- {{err}} -->
+                      Choose a category,please
+                      <!-- Invalid pk "0" - object does not exist. -->
                     </li>
                   </ul>
                 </div>
@@ -70,6 +72,7 @@
                     id="input-3"
                     v-model="mainText"
                     placeholder="What is this idea about..."
+                    
                     rows="3"
                     max-rows="6"
                     ></b-form-textarea>
@@ -331,7 +334,26 @@ export default {
 .is-success {
   background-color: cadetblue;
 }                      
-                   
+ /* .input-area {
+  outline: none;
+  border: 1px solid #d8d8d8 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background-color: #ffffff;
+  height: 150px;
+  flex-grow: 1;
+  padding: 10px !important;
+  font-family: inherit;
+  transition: 0.3s;
+  font-size: 16px;
+  font-weight: 300;
+  height: 400px;
+  color: #000000;
+  letter-spacing: 1px;
+  overflow: hidden;
+  overflow-y: scroll;
+  resize: none;
+ }                   */
                 
 
 </style>

@@ -1,4 +1,5 @@
 import axios from '@/api/axios'
+import simpleAPI from '@/api/plainAxios'
 
 const register = (creds)=>{
     return axios.post('/auth/users/',creds)
@@ -29,7 +30,7 @@ const requestChangePsw = (creds)=>{
 const registerGoogle = ()=>{
     console.log("api auth prepares url to send ")
     let url = 'http://localhost:8080'
-    axios.get(`/auth/o/google-oauth2/?redirect_uri=${url}/google`)
+    return axios.get(`/auth/o/google-oauth2/?redirect_uri=${url}/google`)
 }
 const googleAuth = async (state,code)=>{
     if(state&&code&& !localStorage.getItem('accessToken')){
@@ -55,6 +56,20 @@ const googleAuth = async (state,code)=>{
         }
     }
 }
+const getProfile = (id)=>{
+    // access not private
+    return simpleAPI.get(`/api/v1/profile-info/${id}/`)
+}
+
+const profileOwnerAction = (unid)=>{
+    // private access to profile section in Menu
+    return axios.get(`/api/v1/profile-owner/${unid}/`)
+}
+
+const profileOwnerEdit = (unid,profileData)=>{
+    // private access to edit profile 
+    return axios.patch(`/api/v1/profile-owner/${unid}/`,profileData)
+}
 
 
 export default {
@@ -66,7 +81,10 @@ export default {
     googleAuth,
     confirmEmailPswForget,
     requestNewPsw,
-    requestChangePsw
+    requestChangePsw,
+    getProfile,
+    profileOwnerAction,
+    profileOwnerEdit
     
 
 }    

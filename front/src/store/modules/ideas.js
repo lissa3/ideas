@@ -52,7 +52,6 @@ const actions = {
         }          
     },
     
-
 }
 const mutations = {
     [mutationTypes.SET_IDEAS_LOADING](state){

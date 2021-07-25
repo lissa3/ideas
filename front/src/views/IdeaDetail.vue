@@ -31,7 +31,7 @@
           <div class="banner-collection">
             <div class="author-info d-flex align-items-center justify-content-around">              
               <b-avatar></b-avatar>
-              <router-link :to="{name:'userProfile',params:{id:idea.author}}" class="px-2">
+              <router-link :to="{name:'profile',params:{id:idea.author}}" class="px-2">
                 {{idea.owner_idea}}
               </router-link>
             </div>
@@ -80,33 +80,39 @@
                         </div>
                     </div>
                 </div>  
-                <div class="d-flex justify-content-end mt-3 px-3 ">
-                  <div class="d-flex justify-content-between">
-                    <div class="px-1"><span>Rating: </span><b-icon-star-fill></b-icon-star-fill>
-                      <span class="px-1"><strong>&nbsp;&nbsp;{{idea.avg_rate}}</strong></span>
+                <!-- <div class="d-flex justify-content-end mt-3 px-3 "> -->
+                <div class="d-flex justify-content-between mt-3 px-3 ">
+                  <!-- <div class="d-flex justify-content-between"> -->
+                   
+                    <div class="d-flex justify-content-start">
+                      <div class="lead">Current rating:&nbsp; </div>
+                       <app-rating-show :rating="idea.avg_rate"></app-rating-show> 
+                       <div><span class="px-1"><strong>&nbsp;&nbsp;{{idea.avg_rate}}</strong></span></div>                   
+                   
                     </div>
-                    <div class="box d-flex px-1">              
-                      <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
-                      <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
-                      <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
-                      <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
-                      <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
-                    </div>
-                  </div>               
+<!-- add rating for auth-ed users                     -->
+                <template v-if="isLoggedIn">
+                    <div class="d-flex justify-content-start">
+                      <div class="lead">Add  rating&nbsp; &nbsp; </div>
+                      <div class="box d-flex px-1">              
+                        <p class="b1" @click="doStar(5)"><b-icon-star-fill></b-icon-star-fill></p> 
+                        <p class="b2" @click="doStar(4)"><b-icon-star-fill></b-icon-star-fill></p> 
+                        <p class="b3" @click="doStar(3)"><b-icon-star-fill></b-icon-star-fill></p> 
+                        <p class="b4" @click="doStar(2)"><b-icon-star-fill></b-icon-star-fill></p> 
+                        <p class="b5" @click="doStar(1)"><b-icon-star-fill></b-icon-star-fill></p>             
+                      </div>
+                  </div>  
+                </template>             
                   
                 </div>
-                <div class="d-flex justify-content-end mt-3 px-3 ">
-                  
-                    <p v-if="thxRating" class="thanks">Thank you for giving a rating</p>
-                 
-                     
+                <div class="d-flex justify-content-end mt-3 px-3 ">                  
+                    <p v-if="thxRating" class="thanks">Thank you for giving a rating</p>                
                 </div>         
-                <div class="card-body">                   
-                </div>               
-                <div class="card-text px-3">
-                    <div class="mb-2">
-                      <p class="text-center">{{idea.lead_text}}</p>
-                      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur architecto eum atque odio deserunt! Eaque velit possimus, repellat quis adipisci at accusamus dolores ex sequi corrupti fugiat delectus asperiores non.</p>
+                               
+                <div class="card-text px-3 offset-md-2">
+                    <div class="mb-2 text-left">
+                      
+                      <p>{{idea.lead_text}}Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur architecto eum atque odio deserunt! Eaque velit possimus, repellat quis adipisci at accusamus dolores ex sequi corrupti fugiat delectus asperiores non.</p>
                       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint suscipit laboriosam unde, vel nemo blanditiis voluptates? Perferendis similique qui labore porro aliquid, nobis quidem odio, quos neque aperiam placeat consectetur.</p>
                     </div>
                     <div class="idea-read-more mb-2">
@@ -124,8 +130,9 @@
                       <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                     </div> -->
                       <app-like 
-                        :id="idea.id" 
-                        :idea-likes="idea.an_likes"                                            
+                        :idea-id="idea.id" 
+                        :idea-likes="idea.an_likes"
+                        :is-logged-in="isLoggedIn"                                            
                         >
                       </app-like>
                     <small class="text-muted">9 mins</small>
@@ -157,11 +164,15 @@
 import AppLoader from '@/components/Loader'
 import AppErrorMsg from '@/components/ErrorMsg'
 import AppDeleteIdeaConfirmation from '@/components/Modal.vue'
+import AppRatingShow from '@/components/RatingShow'
 import AppLike from '@/components/Like'
 import AppTagsList from '@/components/TagsList'
 import {mapState,mapGetters} from 'vuex'
 import {actionTypes as singleIdeaActionType} from '@/store/modules/singleIdea'
 import {getterTypes as authGetterTypes} from '@/store/modules/auth'
+
+
+
 
 export default {
   name: 'AppIdeaDetail',
@@ -170,7 +181,8 @@ export default {
     AppErrorMsg,
     AppDeleteIdeaConfirmation,
     AppTagsList,
-    AppLike
+    AppLike,
+    AppRatingShow
   },
   data(){
     return{
@@ -187,7 +199,8 @@ export default {
             error:state=>state.idea.error
         }),
         ...mapGetters({
-          currentUser:authGetterTypes.currentUser
+          currentUser:authGetterTypes.currentUser,
+          isLoggedIn:authGetterTypes.isLoggedIn
         }),
         authorIsCurrentUser(){
           // async req with unknown data (anonymous/user/user=== idea author)

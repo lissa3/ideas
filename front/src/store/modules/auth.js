@@ -105,6 +105,7 @@ const mutations = {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     localStorage.removeItem('userId');
+    localStorage.removeItem('profile');
     
   },
   [mutationTypes.PASS_EMAIL_POTENTIAL_USER](state,email) {
@@ -273,7 +274,7 @@ const actions = {
     })
   },
   async [actionTypes.login]({commit},creds){
-    console.log("msg from store... func login")
+    console.log("ac types",actionTypes.login)
     try{
     const resp = await authAPI.login(creds)         
         //console.log("got from server",resp) 

@@ -17,8 +17,12 @@ export const mutationTypes = {
     DELETE_IDEA_FAILURE:'[single idea] DELETE idea failure',
 
     LIKE_START:'[single idea] GIVE like start',
-    SET_LIKE_SUCCESS:'[single idea] SET idea success',
-    LIKE_FAILURE:'[single idea] LIKE idea failure',
+    SET_LIKE_SUCCESS:'[single idea] UPDATE like idea success',
+    LIKE_FAILURE:'[single idea] UPDATE like idea failure',
+
+    GET_INITIAL_LIKE_START:'[single idea] GET initial like start',
+    GET_INITIAL_LIKE_SUCCESS:'[single idea] GET like idea success',
+    GET_INITIAL_LIKE_FAILURE:'[single idea] GET like idea failure',
 
     RATING_START:'[single idea] GIVE rating start',
     SET_RATING_SUCCESS:'[single idea] SET rating success',
@@ -28,6 +32,7 @@ export const actionTypes = {
     getIdea:'[single idea] Get one idea',
     deleteIdea:'[single idea] Delete idea',
     handleLike:'[single idea] Handle Like',
+    getLikeState:'[single idea] Get initial state of like',
     handleRating:'[single idea] Handle Rating',   
     
 }
@@ -57,6 +62,11 @@ const mutations = {
     [mutationTypes.LIKE_START](state){},
     [mutationTypes.SET_LIKE_SUCCESS](state){},
     [mutationTypes.LIKE_FAILURE](state,err){
+        state.error,err
+    },
+    [mutationTypes.GET_INITIAL_LIKE_START](state){},
+    [mutationTypes.GET_INITIAL_LIKE_SUCCESS](state){},
+    [mutationTypes.GET_INITIAL_LIKE_FAILURE](state,err){
         state.error,err
     },
     [mutationTypes.RATING_START](state){},
@@ -102,16 +112,48 @@ const actions = {
     // async [actionTypes.register]({commit},creds){
     async [actionTypes.handleLike]({commit},likeInfo){      
         commit(mutationTypes.LIKE_START);        
+        const servResp = {}         
         try{
-            // console.log(obj.like)          
+            // console.log(obj.like) 
             const resp = await ideaAPI.giveLike(likeInfo) 
             commit(mutationTypes.SET_LIKE_SUCCESS);           
-            // resp.data = {"like":true/false}                      
-            return resp            
+            // resp.data = {"like":true/false}
+            servResp.status = resp.status
+            servResp.data = resp.data 
+            console.log("dj serv sends data:",resp.data.like)
+            console.log("to vue: serv resp data",servResp)                     
+            return servResp            
 
         } catch(err){
-            console.log("error by getIdea request",err)
-            commit(mutationTypes.LIKE_FAILURE,err); 
+            console.log(servResp,"serv resp")
+            console.log("error by give like request",Object.keys(err))
+            commit(mutationTypes.LIKE_FAILURE,err);
+            servResp.status = err.response.status
+            return servResp     
+          
+            
+        }          
+    },
+    async [actionTypes.getLikeState]({commit},ideaId){      
+        commit(mutationTypes.GET_INITIAL_LIKE_START);        
+        const servResp = {}         
+        try{
+            // console.log(obj.like) 
+            const resp = await ideaAPI.getInitialLikeState(ideaId) 
+            commit(mutationTypes.GET_INITIAL_LIKE_SUCCESS);           
+            // resp.data = {"like":true/false,"rating":null}
+            servResp.status = resp.status
+            servResp.data = resp.data 
+            // console.log("dj serv sends data:",resp.data.like)
+            // console.log("to vue: serv resp data",servResp)                     
+            return servResp            
+
+        } catch(err){
+            // console.log(servResp,"serv resp")           
+            commit(mutationTypes.GET_INITIAL_LIKE_FAILURE,err);
+            servResp.status = err.response.status
+            return servResp     
+          
             
         }          
     },

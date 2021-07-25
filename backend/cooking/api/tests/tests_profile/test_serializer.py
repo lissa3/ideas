@@ -18,10 +18,12 @@ class ProfileSerializerTesCase(TestCase):
         id is set to string (see ser-er CharField(read_olnly) """
         serial_profile = ProfileSerializer(self.profile).data
         expected_data = {
-            "unid": self.profile.unid,
-            "user_id": self.user.id,
+            # "unid": self.profile.unid,
+            # "user_id": self.user.id,
             "image": None,
             "website": "",
+            "bio":"",
+            "name":"nick"
             
 
         }
